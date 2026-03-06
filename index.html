@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAB-VISUAL | Software • Apps • Digital Solutions</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0c;
+    --surface: #111115;
+    --card: #14141a;
+    --teal: #3dd6f5;
+    --blue: #1a8fc1;
+    --gold: #f0b429;
+    --white: #e8eaf0;
+    --muted: #5a5e72;
+    --border: #1e2030;
+    --glow-teal: rgba(61,214,245,0.15);
+    --glow-gold: rgba(240,180,41,0.15);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'Rajdhani', sans-serif;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* ─── NOISE OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 9999; opacity: .4;
+  }
+
+  /* ─── SCANNING LINES ─── */
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background: repeating-linear-gradient(
+      0deg, transparent, transparent 2px,
+      rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px
+    );
+    pointer-events: none; z-index: 9998;
+  }
+
+  /* ─── NAVBAR ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 4rem;
+    background: rgba(10,10,12,0.85);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.3rem; font-weight: 700;
+    color: var(--teal);
+    letter-spacing: 2px;
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--gold); }
+
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .85rem; letter-spacing: 1px;
+    transition: color .3s;
+  }
+  .nav-links a:hover { color: var(--teal); }
+
+  .nav-cta {
+    padding: .5rem 1.4rem;
+    border: 1px solid var(--teal);
+    color: var(--teal) !important;
+    border-radius: 2px;
+    transition: background .3s, color .3s !important;
+  }
+  .nav-cta:hover { background: var(--teal); color: var(--bg) !important; }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 8rem 4rem 4rem;
+    position: relative; overflow: hidden;
+  }
+
+  /* grid lines bg */
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(61,214,245,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(61,214,245,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridPan 20s linear infinite;
+  }
+  @keyframes gridPan { from { transform: translateY(0); } to { transform: translateY(60px); } }
+
+  /* glowing orbs */
+  .orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(80px); pointer-events: none;
+  }
+  .orb-1 { width: 500px; height: 500px; background: rgba(61,214,245,.06); top: -100px; right: -100px; }
+  .orb-2 { width: 400px; height: 400px; background: rgba(240,180,41,.05); bottom: -80px; left: 10%; }
+
+  .hero-inner { position: relative; z-index: 1; max-width: 900px; }
+
+  .hero-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .8rem; color: var(--teal);
+    letter-spacing: 3px; margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: .8rem;
+  }
+  .hero-label::before {
+    content: '> ';
+    color: var(--gold);
+  }
+
+  h1 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 900; line-height: 1;
+    letter-spacing: -1px;
+    margin-bottom: .3rem;
+  }
+  h1 .brand-fab { color: var(--teal); }
+  h1 .brand-visual { color: var(--white); }
+  h1 .dash { color: var(--gold); }
+
+  .hero-tagline {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1rem; color: var(--gold);
+    letter-spacing: 4px; margin: 1.2rem 0 2rem;
+  }
+  .hero-tagline span { color: var(--muted); margin: 0 .5rem; }
+
+  .hero-desc {
+    font-size: 1.2rem; color: rgba(232,234,240,.6);
+    line-height: 1.7; max-width: 560px;
+    margin-bottom: 3rem; font-weight: 400;
+  }
+
+  .hero-btns { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+
+  .btn {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .9rem; letter-spacing: 1px;
+    padding: .9rem 2.2rem; border-radius: 2px;
+    text-decoration: none; transition: all .3s;
+    display: inline-block;
+  }
+  .btn-primary {
+    background: var(--teal); color: var(--bg); border: 1px solid var(--teal);
+    box-shadow: 0 0 20px rgba(61,214,245,.3);
+  }
+  .btn-primary:hover { box-shadow: 0 0 40px rgba(61,214,245,.5); transform: translateY(-2px); }
+  .btn-outline {
+    background: transparent; color: var(--white); border: 1px solid var(--border);
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* floating code snippet */
+  .hero-code {
+    position: absolute; right: 0; top: 50%;
+    transform: translateY(-50%);
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--teal);
+    padding: 2rem 2.5rem;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .85rem; line-height: 2;
+    border-radius: 4px;
+    opacity: .85;
+    animation: floatCode 6s ease-in-out infinite;
+    min-width: 340px;
+  }
+  @keyframes floatCode {
+    0%,100% { transform: translateY(-50%) translateX(0); }
+    50% { transform: translateY(-52%) translateX(-6px); }
+  }
+  .code-kw { color: var(--teal); }
+  .code-str { color: var(--gold); }
+  .code-fn { color: #c792ea; }
+  .code-cm { color: var(--muted); }
+  .code-cursor {
+    display: inline-block; width: 8px; height: 1em;
+    background: var(--teal); vertical-align: middle;
+    animation: blink 1s step-end infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  /* ─── SECTION BASE ─── */
+  section { padding: 7rem 4rem; position: relative; }
+  .section-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .75rem; color: var(--teal);
+    letter-spacing: 4px; margin-bottom: .8rem;
+    display: flex; align-items: center; gap: .6rem;
+  }
+  .section-label::before { content: '//'; color: var(--gold); }
+  h2 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 700; margin-bottom: 1rem;
+  }
+  h2 em { font-style: normal; color: var(--teal); }
+
+  /* ─── SERVICES ─── */
+  #services { background: var(--surface); }
+  #services::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--teal), transparent);
+  }
+
+  .services-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
+    gap: 1.5rem; margin-top: 4rem;
+  }
+
+  .service-card {
+    background: var(--card); border: 1px solid var(--border);
+    padding: 2.5rem 2rem;
+    border-radius: 4px; position: relative; overflow: hidden;
+    transition: border-color .3s, transform .3s;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--teal), var(--blue));
+    transform: scaleX(0); transform-origin: left;
+    transition: transform .4s;
+  }
+  .service-card:hover { border-color: rgba(61,214,245,.3); transform: translateY(-4px); }
+  .service-card:hover::before { transform: scaleX(1); }
+
+  .service-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 2.5rem; font-weight: 900;
+    color: rgba(61,214,245,.08);
+    position: absolute; top: 1.2rem; right: 1.5rem;
+    line-height: 1;
+  }
+
+  .service-icon {
+    width: 48px; height: 48px; margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, rgba(61,214,245,.1), rgba(26,143,193,.1));
+    border: 1px solid rgba(61,214,245,.2);
+    border-radius: 4px; display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+  }
+
+  .service-card h3 {
+    font-family: 'Orbitron', monospace;
+    font-size: 1rem; font-weight: 700; color: var(--teal);
+    letter-spacing: 1px; margin-bottom: .8rem;
+  }
+  .service-card p { font-size: 1rem; color: rgba(232,234,240,.55); line-height: 1.6; }
+
+  /* ─── ABOUT ─── */
+  #about { max-width: 1300px; margin: 0 auto; }
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 6rem;
+    align-items: center; margin-top: 4rem;
+  }
+
+  .about-text p {
+    font-size: 1.1rem; color: rgba(232,234,240,.65);
+    line-height: 1.8; margin-bottom: 1.5rem;
+  }
+
+  .about-dev {
+    background: var(--card); border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    padding: 2rem; border-radius: 4px;
+    margin-top: 2rem;
+  }
+  .dev-name {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.1rem; font-weight: 700; color: var(--gold);
+    margin-bottom: .3rem;
+  }
+  .dev-role {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .8rem; color: var(--muted); letter-spacing: 2px;
+  }
+
+  .stats-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+  }
+  .stat-box {
+    background: var(--card); border: 1px solid var(--border);
+    padding: 1.8rem; border-radius: 4px; text-align: center;
+    transition: border-color .3s;
+  }
+  .stat-box:hover { border-color: var(--teal); }
+  .stat-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 2.2rem; font-weight: 900; color: var(--teal);
+    display: block; margin-bottom: .3rem;
+  }
+  .stat-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .75rem; color: var(--muted); letter-spacing: 2px;
+  }
+
+  /* ─── TECH STACK ─── */
+  #tech { background: var(--surface); text-align: center; }
+  #tech::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .tech-list {
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: 1rem; margin-top: 3rem;
+  }
+  .tech-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .8rem; letter-spacing: 1px;
+    padding: .5rem 1.2rem;
+    border: 1px solid var(--border);
+    border-radius: 2px; color: var(--muted);
+    transition: all .3s;
+  }
+  .tech-tag:hover { border-color: var(--teal); color: var(--teal); background: var(--glow-teal); }
+
+  /* ─── CONTACT ─── */
+  #contact { max-width: 900px; margin: 0 auto; text-align: center; }
+  .contact-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 6px; padding: 4rem; margin-top: 4rem;
+    position: relative; overflow: hidden;
+  }
+  .contact-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--teal), var(--gold), var(--teal));
+  }
+
+  .contact-items {
+    display: flex; justify-content: center; flex-wrap: wrap;
+    gap: 2.5rem; margin: 3rem 0;
+  }
+  .contact-item {
+    display: flex; align-items: center; gap: .8rem;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .9rem; color: var(--white);
+    text-decoration: none; transition: color .3s;
+  }
+  .contact-item:hover { color: var(--teal); }
+  .contact-item .ci-icon {
+    width: 36px; height: 36px; border: 1px solid var(--border);
+    border-radius: 4px; display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; transition: border-color .3s;
+  }
+  .contact-item:hover .ci-icon { border-color: var(--teal); }
+
+  /* ─── TERMINAL TICKER ─── */
+  .ticker {
+    background: rgba(61,214,245,.04);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: .8rem 0; overflow: hidden;
+    white-space: nowrap;
+  }
+  .ticker-inner {
+    display: inline-block;
+    animation: tick 25s linear infinite;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .78rem; color: var(--muted); letter-spacing: 1px;
+  }
+  .ticker-inner span { color: var(--teal); margin: 0 1rem; }
+  @keyframes tick { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding: 3rem 4rem;
+    border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .78rem; color: var(--muted);
+  }
+  footer .f-logo {
+    font-family: 'Orbitron', monospace;
+    font-size: 1rem; font-weight: 700; color: var(--teal);
+    letter-spacing: 2px;
+  }
+
+  /* ─── BOOKING SECTION ─── */
+  #booking { background: var(--surface); }
+  #booking::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--teal), transparent);
+  }
+
+  .booking-wrapper {
+    max-width: 1100px; margin: 0 auto;
+  }
+
+  .booking-grid {
+    display: grid; grid-template-columns: 1fr 1.4fr;
+    gap: 4rem; margin-top: 4rem; align-items: start;
+  }
+
+  /* Appointment type cards */
+  .appt-types { display: flex; flex-direction: column; gap: 1rem; }
+
+  .appt-type-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 4px; padding: 1.4rem 1.6rem;
+    cursor: pointer; transition: all .3s;
+    display: flex; align-items: flex-start; gap: 1rem;
+    position: relative; overflow: hidden;
+  }
+  .appt-type-card::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px; background: var(--teal);
+    transform: scaleY(0); transform-origin: bottom;
+    transition: transform .3s;
+  }
+  .appt-type-card:hover, .appt-type-card.active {
+    border-color: rgba(61,214,245,.35);
+    background: rgba(61,214,245,.04);
+  }
+  .appt-type-card:hover::before, .appt-type-card.active::before { transform: scaleY(1); }
+
+  .appt-icon {
+    font-size: 1.5rem; width: 44px; height: 44px;
+    background: rgba(61,214,245,.08); border: 1px solid rgba(61,214,245,.15);
+    border-radius: 4px; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: background .3s;
+  }
+  .appt-type-card.active .appt-icon { background: rgba(61,214,245,.18); }
+
+  .appt-info h4 {
+    font-family: 'Orbitron', monospace; font-size: .85rem;
+    color: var(--teal); letter-spacing: 1px; margin-bottom: .3rem;
+  }
+  .appt-info p { font-size: .9rem; color: var(--muted); line-height: 1.4; }
+
+  .appt-badge {
+    margin-left: auto; flex-shrink: 0;
+    font-family: 'Share Tech Mono', monospace; font-size: .7rem;
+    padding: .2rem .6rem; border-radius: 2px;
+    border: 1px solid var(--border); color: var(--muted);
+    align-self: center;
+  }
+  .appt-type-card.active .appt-badge {
+    border-color: var(--gold); color: var(--gold);
+  }
+
+  /* Form */
+  .booking-form-wrap {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 6px; padding: 2.5rem;
+    position: relative; overflow: hidden;
+  }
+  .booking-form-wrap::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--teal), var(--gold));
+  }
+
+  .form-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .78rem; color: var(--teal);
+    letter-spacing: 2px; margin-bottom: 1.8rem;
+    display: flex; align-items: center; gap: .5rem;
+  }
+  .form-title::before { content: '>'; color: var(--gold); }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  .field-group { display: flex; flex-direction: column; gap: .4rem; margin-bottom: 1.2rem; }
+
+  .field-group label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .72rem; color: var(--muted); letter-spacing: 1px;
+  }
+
+  .field-group input,
+  .field-group select,
+  .field-group textarea {
+    background: rgba(255,255,255,.03);
+    border: 1px solid var(--border);
+    border-radius: 3px; padding: .75rem 1rem;
+    color: var(--white); font-family: 'Rajdhani', sans-serif;
+    font-size: 1rem; outline: none;
+    transition: border-color .3s, background .3s;
+    width: 100%;
+  }
+  .field-group input:focus,
+  .field-group select:focus,
+  .field-group textarea:focus {
+    border-color: var(--teal); background: rgba(61,214,245,.04);
+  }
+  .field-group select { cursor: pointer; appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%233dd6f5' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 1rem center;
+  }
+  .field-group select option { background: #14141a; color: var(--white); }
+  .field-group textarea { resize: vertical; min-height: 100px; }
+
+  /* Modality toggle */
+  .modality-toggle { display: flex; gap: .8rem; }
+  .mod-btn {
+    flex: 1; padding: .7rem; border: 1px solid var(--border);
+    background: transparent; color: var(--muted);
+    font-family: 'Share Tech Mono', monospace; font-size: .78rem;
+    letter-spacing: 1px; border-radius: 3px; cursor: pointer;
+    transition: all .3s; display: flex; align-items: center;
+    justify-content: center; gap: .5rem;
+  }
+  .mod-btn:hover { border-color: var(--teal); color: var(--teal); }
+  .mod-btn.active { border-color: var(--teal); color: var(--teal); background: rgba(61,214,245,.08); }
+
+  /* Selected type display */
+  .selected-type-tag {
+    display: inline-flex; align-items: center; gap: .5rem;
+    padding: .4rem .9rem; border-radius: 2px;
+    border: 1px solid var(--gold); color: var(--gold);
+    font-family: 'Share Tech Mono', monospace; font-size: .75rem;
+    margin-bottom: 1.5rem; letter-spacing: 1px;
+    background: rgba(240,180,41,.06);
+    transition: all .3s;
+  }
+  .selected-type-tag::before { content: '◈'; font-size: .8rem; }
+
+  .btn-submit {
+    width: 100%; padding: 1rem; margin-top: .5rem;
+    background: linear-gradient(135deg, var(--teal), var(--blue));
+    border: none; color: var(--bg);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .9rem; letter-spacing: 2px;
+    border-radius: 3px; cursor: pointer;
+    transition: opacity .3s, transform .3s, box-shadow .3s;
+    box-shadow: 0 0 20px rgba(61,214,245,.2);
+  }
+  .btn-submit:hover {
+    opacity: .9; transform: translateY(-2px);
+    box-shadow: 0 0 35px rgba(61,214,245,.4);
+  }
+  .btn-submit:active { transform: translateY(0); }
+
+  /* Success message */
+  .form-success {
+    display: none; text-align: center; padding: 2rem 0;
+  }
+  .form-success .success-icon { font-size: 3rem; margin-bottom: 1rem; }
+  .form-success h3 {
+    font-family: 'Orbitron', monospace; color: var(--teal);
+    font-size: 1.1rem; margin-bottom: .5rem;
+  }
+  .form-success p { color: var(--muted); font-size: .95rem; }
+
+  @media (max-width: 900px) {
+    .booking-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+
+  /* ─── SCROLL REVEAL ─── */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity .7s, transform .7s; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    section { padding: 5rem 1.5rem; }
+    .hero { padding: 7rem 1.5rem 3rem; }
+    .hero-code { display: none; }
+    .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#"><span>FAB</span>-VISUAL</a>
+  <ul class="nav-links">
+    <li><a href="#services">Servicios</a></li>
+    <li><a href="#about">Nosotros</a></li>
+    <li><a href="#tech">Tech</a></li>
+    <li><a href="#booking">Agenda</a></li>
+    <li><a href="#contact" class="nav-cta">Contacto</a></li>
+  </ul>
+</nav>
+
+<!-- TICKER -->
+<div style="margin-top:72px;" class="ticker">
+  <div class="ticker-inner">
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    > Iniciando FAB-VISUAL...<span>✓</span>
+    Cargando soluciones digitales...<span>✓</span>
+    Business Software<span>•</span>
+    Automation Systems<span>•</span>
+    IT Support<span>•</span>
+    > Iniciando FAB-VISUAL...<span>✓</span>
+    Cargando soluciones digitales...<span>✓</span>
+    Business Software<span>•</span>
+    Automation Systems<span>•</span>
+    IT Support<span>•</span>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="hero-inner">
+    <div class="hero-label reveal">SOLUCIONES DIGITALES DE PRÓXIMA GENERACIÓN</div>
+    <h1 class="reveal">
+      <span class="brand-fab">FAB</span><span class="dash">-</span><span class="brand-visual">VISUAL</span>
+    </h1>
+    <div class="hero-tagline reveal">
+      Software<span>•</span>Apps<span>•</span>Digital Solutions
+    </div>
+    <p class="hero-desc reveal">
+      Transformamos ideas en software poderoso. Desde aplicaciones empresariales hasta sistemas de automatización, construimos la tecnología que impulsa tu negocio.
+    </p>
+    <div class="hero-btns reveal">
+      <a href="#services" class="btn btn-primary">Ver Servicios</a>
+      <a href="#contact" class="btn btn-outline">Hablar con un experto</a>
+    </div>
+  </div>
+
+  <div class="hero-code reveal">
+    <div><span class="code-kw">class</span> <span class="code-fn">FabVisual</span> {</div>
+    <div>&nbsp;&nbsp;<span class="code-cm">developer</span> = <span class="code-str">"Lloammes Fabre"</span>;</div>
+    <div>&nbsp;&nbsp;<span class="code-cm">company</span> = <span class="code-str">"Fab-Visual"</span>;</div>
+    <div>&nbsp;&nbsp;<span class="code-cm">services</span> = [</div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-str">"Business Software"</span>,</div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-str">"Automation Systems"</span>,</div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-str">"IT Support"</span></div>
+    <div>&nbsp;&nbsp;];</div>
+    <div>};</div>
+    <div style="margin-top:.5rem;">
+      <span style="color:var(--teal);">&gt; run</span>
+      <span class="code-str"> fab-visual.com</span>
+    </div>
+    <div style="color:var(--muted); font-size:.8rem;">
+      &gt; Loading digital solutions...<span class="code-cursor"></span>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div style="max-width:1200px;margin:0 auto;">
+    <div class="section-label reveal">SERVICIOS</div>
+    <h2 class="reveal">Lo que <em>construimos</em></h2>
+    <p style="color:rgba(232,234,240,.5);font-size:1.1rem;max-width:500px;" class="reveal">
+      Soluciones tecnológicas diseñadas para escalar con tu negocio.
+    </p>
+
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-num">01</div>
+        <div class="service-icon">💼</div>
+        <h3>BUSINESS SOFTWARE</h3>
+        <p>Desarrollamos software empresarial a medida: CRMs, ERPs, sistemas de gestión internos y plataformas web que optimizan cada proceso de tu operación.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-num">02</div>
+        <div class="service-icon">⚙️</div>
+        <h3>AUTOMATION SYSTEMS</h3>
+        <p>Automatizamos flujos de trabajo, reportes, integraciones entre plataformas y procesos repetitivos para que tu equipo se enfoque en lo que importa.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-num">03</div>
+        <div class="service-icon">🛡️</div>
+        <h3>IT SUPPORT</h3>
+        <p>Soporte técnico confiable, mantenimiento de sistemas, gestión de infraestructura y asesoría tecnológica para mantener tu empresa funcionando sin interrupciones.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-num">04</div>
+        <div class="service-icon">📱</div>
+        <h3>APPS MÓVILES & WEB</h3>
+        <p>Diseñamos y desarrollamos aplicaciones modernas con experiencias de usuario excepcionales, desde el concepto hasta el deployment en producción.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <div class="section-label">SOBRE NOSOTROS</div>
+      <h2>Código con <em>propósito</em></h2>
+      <p>FAB-VISUAL nació de la visión de que cada negocio merece tecnología de clase mundial, sin importar su tamaño. Combinamos experiencia técnica profunda con una comprensión real del mundo empresarial.</p>
+      <p>No somos solo developers — somos socios estratégicos que entienden tus metas y construyen las herramientas para alcanzarlas.</p>
+      <div class="about-dev">
+        <div class="dev-name">Lloammes Fabre</div>
+        <div class="dev-role" style="margin-bottom:.8rem;">FOUNDER / DEVELOPER</div>
+        <p style="font-size:.95rem;color:rgba(232,234,240,.55);line-height:1.6;">
+          Fundador y desarrollador principal de FAB-VISUAL. Especialista en soluciones de software empresarial y sistemas de automatización.
+        </p>
+      </div>
+    </div>
+    <div class="stats-grid reveal">
+      <div class="stat-box">
+        <span class="stat-num">100%</span>
+        <span class="stat-label">CÓDIGO LIMPIO</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">24/7</span>
+        <span class="stat-label">IT SUPPORT</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">3</span>
+        <span class="stat-label">CORE SERVICES</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">∞</span>
+        <span class="stat-label">ESCALABILIDAD</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS COUNTER -->
+<section id="stats" style="background:var(--surface);padding:5rem 4rem;position:relative;overflow:hidden;">
+  <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(61,214,245,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(61,214,245,0.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;"></div>
+  <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);"></div>
+  <div style="max-width:1100px;margin:0 auto;position:relative;z-index:1;">
+    <div style="text-align:center;margin-bottom:3.5rem;" class="reveal">
+      <div class="section-label" style="justify-content:center;">NÚMEROS QUE HABLAN</div>
+      <h2>Resultados <em>reales</em></h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;" class="reveal" id="statsRow">
+      <div class="counter-card" style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:2.5rem 1.5rem;text-align:center;position:relative;overflow:hidden;transition:border-color .3s,transform .3s;" onmouseover="this.style.borderColor='rgba(61,214,245,.4)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)'">
+        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:var(--teal);"></div>
+        <div style="font-family:'Orbitron',monospace;font-size:3rem;font-weight:900;color:var(--teal);line-height:1;" class="counter" data-target="50" data-suffix="+">0</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;color:rgba(232,234,240,.5);letter-spacing:2px;margin-top:.6rem;">PROYECTOS ENTREGADOS</div>
+      </div>
+      <div class="counter-card" style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:2.5rem 1.5rem;text-align:center;position:relative;overflow:hidden;transition:border-color .3s,transform .3s;" onmouseover="this.style.borderColor='rgba(240,180,41,.4)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)'">
+        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:var(--gold);"></div>
+        <div style="font-family:'Orbitron',monospace;font-size:3rem;font-weight:900;color:var(--gold);line-height:1;" class="counter" data-target="30" data-suffix="+">0</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;color:rgba(232,234,240,.5);letter-spacing:2px;margin-top:.6rem;">CLIENTES SATISFECHOS</div>
+      </div>
+      <div class="counter-card" style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:2.5rem 1.5rem;text-align:center;position:relative;overflow:hidden;transition:border-color .3s,transform .3s;" onmouseover="this.style.borderColor='rgba(61,214,245,.4)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)'">
+        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:var(--teal);"></div>
+        <div style="font-family:'Orbitron',monospace;font-size:3rem;font-weight:900;color:var(--teal);line-height:1;" class="counter" data-target="5" data-suffix=" años">0</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;color:rgba(232,234,240,.5);letter-spacing:2px;margin-top:.6rem;">DE EXPERIENCIA</div>
+      </div>
+      <div class="counter-card" style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:2.5rem 1.5rem;text-align:center;position:relative;overflow:hidden;transition:border-color .3s,transform .3s;" onmouseover="this.style.borderColor='rgba(240,180,41,.4)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)'">
+        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:var(--gold);"></div>
+        <div style="font-family:'Orbitron',monospace;font-size:3rem;font-weight:900;color:var(--gold);line-height:1;" class="counter" data-target="100" data-suffix="%">0</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;color:rgba(232,234,240,.5);letter-spacing:2px;margin-top:.6rem;">COMPROMISO TOTAL</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DISEÑAMOS -->
+<section id="tech" style="text-align:center;">
+  <div class="section-label" style="justify-content:center;" class="reveal">NUESTRO ENFOQUE</div>
+  <h2 class="reveal">Diseñamos lo que <em>necesitas</em></h2>
+  <p style="color:rgba(232,234,240,.5);font-size:1.1rem;max-width:560px;margin:.8rem auto 4rem;line-height:1.7;" class="reveal">
+    Cada negocio es único. No usamos plantillas — construimos desde cero la solución exacta que tu empresa requiere.
+  </p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;max-width:1100px;margin:0 auto;" class="reveal">
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:2rem 1.5rem;transition:border-color .3s,transform .3s;" onmouseover="this.style.borderColor='rgba(61,214,245,.35)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)'">
+      <div style="font-size:2rem;margin-bottom:1rem;">🎯</div>
+      <div style="font-family:'Orbitron',monospace;font-size:.85rem;color:var(--teal);letter-spacing:1px;margin-bottom:.6rem;">A TU MEDIDA</div>
+      <p style="font-size:.95rem;color:rgba(232,234,240,.55);line-height:1.6;">Analizamos tu operación y diseñamos la solución perfecta para tus procesos específicos.</p>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:2rem 1.5rem;transition:border-color .3s,transform .3s;" onmouseover="this.style.borderColor='rgba(240,180,41,.35)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)'">
+      <div style="font-size:2rem;margin-bottom:1rem;">⚡</div>
+      <div style="font-family:'Orbitron',monospace;font-size:.85rem;color:var(--gold);letter-spacing:1px;margin-bottom:.6rem;">RÁPIDO Y EFICIENTE</div>
+      <p style="font-size:.95rem;color:rgba(232,234,240,.55);line-height:1.6;">Entregamos resultados reales en tiempos concretos. Sin demoras, sin excusas.</p>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:2rem 1.5rem;transition:border-color .3s,transform .3s;" onmouseover="this.style.borderColor='rgba(61,214,245,.35)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)'">
+      <div style="font-size:2rem;margin-bottom:1rem;">🔧</div>
+      <div style="font-family:'Orbitron',monospace;font-size:.85rem;color:var(--teal);letter-spacing:1px;margin-bottom:.6rem;">SOPORTE CONTINUO</div>
+      <p style="font-size:.95rem;color:rgba(232,234,240,.55);line-height:1.6;">No desaparecemos al entregar. Estamos contigo en cada etapa del crecimiento.</p>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:2rem 1.5rem;transition:border-color .3s,transform .3s;" onmouseover="this.style.borderColor='rgba(240,180,41,.35)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)'">
+      <div style="font-size:2rem;margin-bottom:1rem;">📈</div>
+      <div style="font-family:'Orbitron',monospace;font-size:.85rem;color:var(--gold);letter-spacing:1px;margin-bottom:.6rem;">PENSADO PARA CRECER</div>
+      <p style="font-size:.95rem;color:rgba(232,234,240,.55);line-height:1.6;">Construimos con visión de futuro. Tu software escala junto con tu negocio.</p>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section id="booking">
+  <div class="booking-wrapper">
+    <div class="section-label reveal">AGENDA UNA CITA</div>
+    <h2 class="reveal">Reserva tu <em>sesión</em></h2>
+    <p style="color:rgba(232,234,240,.5);font-size:1.1rem;max-width:520px;" class="reveal">
+      Selecciona el tipo de consulta, elige cómo prefieres conectar y nos ponemos en marcha.
+    </p>
+
+    <div class="booking-grid">
+
+      <!-- LEFT: Appointment types -->
+      <div class="appt-types reveal">
+        <div class="appt-type-card active" data-type="Consulta Gratuita" onclick="selectType(this)">
+          <div class="appt-icon">💬</div>
+          <div class="appt-info">
+            <h4>CONSULTA GRATUITA</h4>
+            <p>Cuéntanos tu proyecto y evaluamos juntos la mejor solución.</p>
+          </div>
+          <span class="appt-badge">GRATIS</span>
+        </div>
+        <div class="appt-type-card" data-type="Demo de Software" onclick="selectType(this)">
+          <div class="appt-icon">🖥️</div>
+          <div class="appt-info">
+            <h4>DEMO DE SOFTWARE</h4>
+            <p>Te mostramos en vivo cómo funcionaría la solución para tu negocio.</p>
+          </div>
+          <span class="appt-badge">45 MIN</span>
+        </div>
+        <div class="appt-type-card" data-type="Soporte IT" onclick="selectType(this)">
+          <div class="appt-icon">🛡️</div>
+          <div class="appt-info">
+            <h4>SOPORTE IT</h4>
+            <p>Diagnóstico y solución de problemas técnicos en tu infraestructura.</p>
+          </div>
+          <span class="appt-badge">URGENTE</span>
+        </div>
+        <div class="appt-type-card" data-type="Propuesta de Proyecto" onclick="selectType(this)">
+          <div class="appt-icon">📋</div>
+          <div class="appt-info">
+            <h4>PROPUESTA DE PROYECTO</h4>
+            <p>Revisamos alcance, tiempos y costos para arrancar tu desarrollo.</p>
+          </div>
+          <span class="appt-badge">60 MIN</span>
+        </div>
+      </div>
+
+      <!-- RIGHT: Form -->
+      <div class="booking-form-wrap reveal">
+        <div class="form-title">COMPLETAR RESERVACIÓN</div>
+
+        <div id="formBody">
+          <div class="selected-type-tag" id="selectedTypeTag">Consulta Gratuita</div>
+
+          <div class="form-row">
+            <div class="field-group">
+              <label>NOMBRE *</label>
+              <input type="text" id="bkName" placeholder="Tu nombre completo" required>
+            </div>
+            <div class="field-group">
+              <label>EMPRESA</label>
+              <input type="text" id="bkCompany" placeholder="Nombre de tu empresa">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="field-group">
+              <label>EMAIL *</label>
+              <input type="email" id="bkEmail" placeholder="tu@email.com" required>
+            </div>
+            <div class="field-group">
+              <label>TELÉFONO</label>
+              <input type="tel" id="bkPhone" placeholder="(561) 000-0000">
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label>FECHA PREFERIDA *</label>
+            <input type="date" id="bkDate" required>
+          </div>
+
+          <div class="field-group">
+            <label>MODALIDAD *</label>
+            <div class="modality-toggle">
+              <button class="mod-btn active" id="modPhone" onclick="selectMod('phone', this)">
+                📞 Llamada Telefónica
+              </button>
+              <button class="mod-btn" id="modPerson" onclick="selectMod('person', this)">
+                🤝 En Persona
+              </button>
+            </div>
+          </div>
+
+          <div class="field-group" id="locationField" style="display:none;">
+            <label>DIRECCIÓN / UBICACIÓN</label>
+            <input type="text" id="bkLocation" placeholder="Indica la dirección o lugar de reunión">
+          </div>
+
+          <div class="field-group">
+            <label>DESCRIPCIÓN / MENSAJE</label>
+            <textarea id="bkMessage" placeholder="Cuéntanos brevemente qué necesitas..."></textarea>
+          </div>
+
+          <button class="btn-submit" onclick="submitBooking()">
+            > CONFIRMAR CITA
+          </button>
+        </div>
+
+        <!-- Success State -->
+        <div class="form-success" id="formSuccess">
+          <div class="success-icon">✅</div>
+          <h3>¡CITA AGENDADA!</h3>
+          <p style="margin-bottom:1rem;">Tu solicitud fue enviada exitosamente.<br>Te contactaremos para confirmar los detalles.</p>
+          <p style="color:var(--teal);font-family:'Share Tech Mono',monospace;font-size:.8rem;">
+            > fab-visual.com está en línea...
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label" style="justify-content:center;" class="reveal">CONTACTO</div>
+  <h2 class="reveal">Iniciemos tu <em>proyecto</em></h2>
+  <p style="color:rgba(232,234,240,.5);font-size:1.1rem;" class="reveal">
+    Cuéntanos tu idea. Hacemos el resto.
+  </p>
+  <div class="contact-card reveal">
+    <div class="contact-items">
+      <a href="/cdn-cgi/l/email-protection#026463602f746b7177636e4268616e6d77662c616d6f" class="contact-item">
+        <span class="ci-icon">✉️</span>
+        <span class="__cf_email__" data-cfemail="e98f888bc49f809a9c8885a9838a85869c8dc78a8684">[email&#160;protected]</span>
+      </a>
+      <a href="https://www.fab-visual.com" class="contact-item" target="_blank">
+        <span class="ci-icon">🌐</span>
+        www.fab-visual.com
+      </a>
+    </div>
+    <a href="/cdn-cgi/l/email-protection#5d3b3c3f702b342e283c311d373e31322839733e3230" class="btn btn-primary" style="font-size:1rem;padding:1rem 3rem;">
+      > Enviar Mensaje
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-logo">FAB-VISUAL</div>
+  <div>Software • Apps • Digital Solutions</div>
+  <div style="display:flex;align-items:center;gap:1.2rem;">
+    <span>© 2025 Fab-Visual. All rights reserved.</span>
+    <a href="fab-visual-admin.html" title="Panel Administrativo"
+       style="font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--muted);
+              letter-spacing:1px;text-decoration:none;border:1px solid var(--border);
+              padding:.25rem .6rem;border-radius:2px;opacity:.4;transition:opacity .3s,color .3s,border-color .3s;"
+       onmouseover="this.style.opacity='1';this.style.color='var(--teal)';this.style.borderColor='var(--teal)'"
+       onmouseout="this.style.opacity='.4';this.style.color='var(--muted)';this.style.borderColor='var(--border)'">
+      ⚙ admin
+    </a>
+  </div>
+</footer>
+
+<script>
+  // ─── BOOKING ───
+  let selectedType = 'Consulta Gratuita';
+  let selectedMod = 'phone';
+
+  function selectType(card) {
+    document.querySelectorAll('.appt-type-card').forEach(c => c.classList.remove('active'));
+    card.classList.add('active');
+    selectedType = card.dataset.type;
+    document.getElementById('selectedTypeTag').textContent = selectedType;
+  }
+
+  function selectMod(mod, btn) {
+    selectedMod = mod;
+    document.querySelectorAll('.mod-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('locationField').style.display = mod === 'person' ? 'flex' : 'none';
+  }
+
+  function submitBooking() {
+    const name = document.getElementById('bkName').value.trim();
+    const email = document.getElementById('bkEmail').value.trim();
+    const date = document.getElementById('bkDate').value;
+    if (!name || !email || !date) {
+      alert('Por favor completa los campos requeridos: Nombre, Email y Fecha.');
+      return;
+    }
+    const company = document.getElementById('bkCompany').value.trim();
+    const phone = document.getElementById('bkPhone').value.trim();
+    const location = document.getElementById('bkLocation').value.trim();
+    const message = document.getElementById('bkMessage').value.trim();
+    const modLabel = selectedMod === 'phone' ? 'Llamada Telefónica' : 'En Persona';
+    const subject = encodeURIComponent('[FAB-VISUAL] Nueva Cita: ' + selectedType + ' — ' + date);
+    const body = encodeURIComponent(
+      'Nueva solicitud de cita desde fab-visual.com\n\n' +
+      'Tipo de cita:  ' + selectedType + '\n' +
+      'Modalidad:     ' + modLabel + '\n' +
+      'Fecha:         ' + date + '\n' +
+      (location ? 'Ubicación:     ' + location + '\n' : '') +
+      '\nNombre:        ' + name + '\n' +
+      (company ? 'Empresa:       ' + company + '\n' : '') +
+      'Email:         ' + email + '\n' +
+      (phone ? 'Teléfono:      ' + phone + '\n' : '') +
+      (message ? '\nMensaje:\n' + message : '') +
+      '\n\n—\nEnviado desde fab-visual.com'
+    );
+    window.location.href = 'mailto:fab-visual@jcloud.com?subject=' + subject + '&body=' + body;
+    setTimeout(() => {
+      document.getElementById('formBody').style.display = 'none';
+      document.getElementById('formSuccess').style.display = 'block';
+    }, 800);
+  }
+
+  // Set min date to today
+  const bkDate = document.getElementById('bkDate');
+  if (bkDate) bkDate.setAttribute('min', new Date().toISOString().split('T')[0]);
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(r => observer.observe(r));
+
+  // ─── ANIMATED COUNTERS ───
+  let countersDone = false;
+  const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting && !countersDone) {
+        countersDone = true;
+        document.querySelectorAll('.counter').forEach(el => {
+          const target = +el.dataset.target;
+          const suffix = el.dataset.suffix || '';
+          const duration = 1800;
+          const step = target / (duration / 16);
+          let current = 0;
+          const timer = setInterval(() => {
+            current += step;
+            if (current >= target) { current = target; clearInterval(timer); }
+            el.textContent = Math.floor(current) + suffix;
+          }, 16);
+        });
+      }
+    });
+  }, { threshold: 0.4 });
+  const statsRow = document.getElementById('statsRow');
+  if (statsRow) statsObserver.observe(statsRow);
+
+  // Staggered hero reveals on load
+  document.querySelectorAll('.hero .reveal').forEach((el, i) => {
+    setTimeout(() => el.classList.add('visible'), 200 + i * 150);
+  });
+</script>
+</body>
+</html>

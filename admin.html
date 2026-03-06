@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAB-VISUAL | Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #07070a;
+  --surface: #0e0e14;
+  --card: #12121a;
+  --card2: #17171f;
+  --teal: #3dd6f5;
+  --blue: #1a8fc1;
+  --gold: #f0b429;
+  --green: #22d4a0;
+  --red: #f55a5a;
+  --purple: #a78bfa;
+  --white: #e8eaf0;
+  --muted: #4a4e62;
+  --muted2: #6b7089;
+  --border: #1a1c2a;
+  --border2: #232538;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--white);
+  font-family: 'Rajdhani', sans-serif;
+  overflow-x: hidden; min-height: 100vh;
+}
+
+/* ═══ LOGIN ═══ */
+#loginScreen {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  background: var(--bg); position: relative; overflow: hidden;
+}
+#loginScreen::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(61,214,245,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(61,214,245,0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+.login-card {
+  background: var(--card); border: 1px solid var(--border2);
+  border-radius: 8px; padding: 3rem 2.5rem; width: 380px;
+  position: relative; overflow: hidden; z-index: 1;
+}
+.login-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--teal), var(--gold));
+}
+.login-logo {
+  font-family: 'Orbitron', monospace; font-size: 1.4rem; font-weight: 900;
+  color: var(--teal); text-align: center; margin-bottom: .3rem; letter-spacing: 2px;
+}
+.login-logo span { color: var(--gold); }
+.login-sub {
+  font-family: 'Share Tech Mono', monospace; font-size: .7rem;
+  color: var(--muted2); text-align: center; letter-spacing: 3px; margin-bottom: 2.5rem;
+}
+.lf-group { margin-bottom: 1.2rem; }
+.lf-group label {
+  font-family: 'Share Tech Mono', monospace; font-size: .7rem;
+  color: var(--muted2); letter-spacing: 1px; display: block; margin-bottom: .4rem;
+}
+.lf-group input {
+  width: 100%; background: rgba(255,255,255,.03); border: 1px solid var(--border2);
+  border-radius: 3px; padding: .8rem 1rem; color: var(--white);
+  font-family: 'Share Tech Mono', monospace; font-size: .9rem; outline: none;
+  transition: border-color .3s;
+}
+.lf-group input:focus { border-color: var(--teal); }
+.login-btn {
+  width: 100%; padding: .9rem; background: linear-gradient(135deg, var(--teal), var(--blue));
+  border: none; border-radius: 3px; color: var(--bg);
+  font-family: 'Share Tech Mono', monospace; font-size: .85rem; letter-spacing: 2px;
+  cursor: pointer; transition: opacity .3s, box-shadow .3s; margin-top: .5rem;
+  box-shadow: 0 0 20px rgba(61,214,245,.2);
+}
+.login-btn:hover { opacity: .9; box-shadow: 0 0 35px rgba(61,214,245,.4); }
+.login-err {
+  color: var(--red); font-family: 'Share Tech Mono', monospace;
+  font-size: .75rem; text-align: center; margin-top: .8rem; display: none;
+}
+.cursor-blink {
+  display: inline-block; width: 8px; height: .9em;
+  background: var(--teal); vertical-align: middle;
+  animation: blink 1s step-end infinite; margin-left: 3px;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* ═══ ADMIN SHELL ═══ */
+#adminShell { display: none; min-height: 100vh; }
+
+/* SIDEBAR */
+.sidebar {
+  position: fixed; top: 0; left: 0; bottom: 0; width: 240px;
+  background: var(--surface); border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; z-index: 100;
+  padding: 1.5rem 0;
+}
+.sb-logo {
+  font-family: 'Orbitron', monospace; font-size: 1.1rem; font-weight: 700;
+  color: var(--teal); padding: 0 1.5rem 1.5rem; letter-spacing: 2px;
+  border-bottom: 1px solid var(--border);
+}
+.sb-logo span { color: var(--gold); }
+.sb-logo small {
+  display: block; font-family: 'Share Tech Mono', monospace;
+  font-size: .62rem; color: var(--muted2); letter-spacing: 2px; margin-top: .2rem;
+}
+.sb-nav { flex: 1; padding: 1.5rem 0; }
+.sb-section-title {
+  font-family: 'Share Tech Mono', monospace; font-size: .62rem;
+  color: var(--muted); letter-spacing: 3px; padding: 0 1.5rem .6rem;
+  margin-top: 1rem;
+}
+.sb-item {
+  display: flex; align-items: center; gap: .8rem;
+  padding: .75rem 1.5rem; cursor: pointer;
+  font-family: 'Share Tech Mono', monospace; font-size: .8rem;
+  color: var(--muted2); letter-spacing: 1px;
+  transition: all .2s; border-left: 3px solid transparent;
+  position: relative;
+}
+.sb-item:hover { color: var(--white); background: rgba(255,255,255,.03); }
+.sb-item.active { color: var(--teal); background: rgba(61,214,245,.05); border-left-color: var(--teal); }
+.sb-item .sb-icon { font-size: 1rem; width: 20px; text-align: center; }
+.sb-badge {
+  margin-left: auto; background: var(--teal); color: var(--bg);
+  font-size: .6rem; padding: .15rem .45rem; border-radius: 10px;
+  font-weight: 700;
+}
+.sb-badge.gold { background: var(--gold); }
+.sb-footer {
+  padding: 1.5rem; border-top: 1px solid var(--border);
+  font-family: 'Share Tech Mono', monospace; font-size: .7rem; color: var(--muted);
+}
+.logout-btn {
+  display: flex; align-items: center; gap: .5rem;
+  color: var(--red); cursor: pointer; transition: opacity .2s; font-size: .75rem;
+  margin-top: .5rem;
+}
+.logout-btn:hover { opacity: .7; }
+
+/* MAIN */
+.main {
+  margin-left: 240px; min-height: 100vh;
+  background: var(--bg);
+}
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.2rem 2.5rem; background: var(--surface);
+  border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 50;
+}
+.topbar-title {
+  font-family: 'Orbitron', monospace; font-size: .95rem; font-weight: 700;
+  color: var(--white); letter-spacing: 1px;
+}
+.topbar-meta {
+  font-family: 'Share Tech Mono', monospace; font-size: .75rem; color: var(--muted2);
+}
+.topbar-status {
+  display: flex; align-items: center; gap: .5rem;
+  font-family: 'Share Tech Mono', monospace; font-size: .75rem; color: var(--green);
+}
+.status-dot {
+  width: 8px; height: 8px; background: var(--green);
+  border-radius: 50%; animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+/* VIEWS */
+.view { display: none; padding: 2.5rem; animation: fadeIn .3s ease; }
+.view.active { display: block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+/* STAT CARDS */
+.stats-row {
+  display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; margin-bottom: 2.5rem;
+}
+.stat-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 6px; padding: 1.5rem; position: relative; overflow: hidden;
+  transition: border-color .3s;
+}
+.stat-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+}
+.stat-card.teal::before { background: var(--teal); }
+.stat-card.gold::before { background: var(--gold); }
+.stat-card.green::before { background: var(--green); }
+.stat-card.purple::before { background: var(--purple); }
+.stat-card:hover { border-color: var(--border2); }
+.stat-num {
+  font-family: 'Orbitron', monospace; font-size: 2.2rem; font-weight: 900;
+  line-height: 1; margin-bottom: .3rem;
+}
+.stat-card.teal .stat-num { color: var(--teal); }
+.stat-card.gold .stat-num { color: var(--gold); }
+.stat-card.green .stat-num { color: var(--green); }
+.stat-card.purple .stat-num { color: var(--purple); }
+.stat-label {
+  font-family: 'Share Tech Mono', monospace; font-size: .7rem;
+  color: var(--muted2); letter-spacing: 2px;
+}
+.stat-icon {
+  position: absolute; right: 1.2rem; top: 50%; transform: translateY(-50%);
+  font-size: 2rem; opacity: .12;
+}
+
+/* SECTION HEADER */
+.section-hdr {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+.section-hdr h2 {
+  font-family: 'Orbitron', monospace; font-size: 1rem; font-weight: 700;
+  color: var(--white); letter-spacing: 1px;
+}
+.section-hdr h2 span { color: var(--teal); }
+
+/* TABLE */
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th {
+  font-family: 'Share Tech Mono', monospace; font-size: .68rem;
+  color: var(--muted2); letter-spacing: 2px; text-align: left;
+  padding: .8rem 1rem; border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+.data-table td {
+  padding: 1rem; border-bottom: 1px solid var(--border);
+  font-size: .95rem; vertical-align: middle;
+}
+.data-table tr:hover td { background: rgba(255,255,255,.015); }
+.data-table tr:last-child td { border-bottom: none; }
+
+/* BADGES */
+.badge {
+  font-family: 'Share Tech Mono', monospace; font-size: .65rem;
+  padding: .25rem .7rem; border-radius: 2px; letter-spacing: 1px;
+}
+.badge-teal { background: rgba(61,214,245,.1); color: var(--teal); border: 1px solid rgba(61,214,245,.2); }
+.badge-gold { background: rgba(240,180,41,.1); color: var(--gold); border: 1px solid rgba(240,180,41,.2); }
+.badge-green { background: rgba(34,212,160,.1); color: var(--green); border: 1px solid rgba(34,212,160,.2); }
+.badge-red { background: rgba(245,90,90,.1); color: var(--red); border: 1px solid rgba(245,90,90,.2); }
+.badge-purple { background: rgba(167,139,250,.1); color: var(--purple); border: 1px solid rgba(167,139,250,.2); }
+
+/* CARD CONTAINER */
+.card-box {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 6px; overflow: hidden;
+}
+
+/* BUTTONS */
+.btn-sm {
+  font-family: 'Share Tech Mono', monospace; font-size: .7rem;
+  padding: .4rem .9rem; border-radius: 2px; cursor: pointer;
+  letter-spacing: 1px; border: 1px solid; transition: all .2s;
+}
+.btn-teal { border-color: var(--teal); color: var(--teal); background: transparent; }
+.btn-teal:hover { background: rgba(61,214,245,.1); }
+.btn-red { border-color: var(--red); color: var(--red); background: transparent; }
+.btn-red:hover { background: rgba(245,90,90,.1); }
+.btn-gold { border-color: var(--gold); color: var(--gold); background: transparent; }
+.btn-gold:hover { background: rgba(240,180,41,.1); }
+.btn-green { border-color: var(--green); color: var(--green); background: transparent; }
+.btn-green:hover { background: rgba(34,212,160,.1); }
+
+/* ACTION BAR */
+.action-bar {
+  display: flex; gap: .8rem; flex-wrap: wrap; align-items: center;
+}
+.filter-select {
+  background: var(--card); border: 1px solid var(--border2);
+  color: var(--muted2); font-family: 'Share Tech Mono', monospace;
+  font-size: .75rem; padding: .4rem .8rem; border-radius: 2px; cursor: pointer; outline: none;
+  letter-spacing: 1px;
+}
+.filter-select:focus { border-color: var(--teal); color: var(--white); }
+
+/* MODAL */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.7);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 500; backdrop-filter: blur(4px);
+  opacity: 0; pointer-events: none; transition: opacity .3s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: var(--card); border: 1px solid var(--border2);
+  border-radius: 8px; padding: 2.5rem; width: 560px; max-width: 95vw;
+  max-height: 90vh; overflow-y: auto; position: relative;
+  transform: translateY(20px); transition: transform .3s;
+}
+.modal-overlay.open .modal { transform: translateY(0); }
+.modal::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--teal), var(--gold));
+}
+.modal h3 {
+  font-family: 'Orbitron', monospace; font-size: 1rem; color: var(--teal);
+  margin-bottom: 1.8rem; letter-spacing: 1px;
+}
+.modal-close {
+  position: absolute; top: 1.2rem; right: 1.2rem;
+  font-family: 'Share Tech Mono', monospace; font-size: .75rem;
+  color: var(--muted2); cursor: pointer; background: none; border: none;
+  transition: color .2s; padding: .3rem .6rem;
+  border: 1px solid var(--border); border-radius: 2px;
+}
+.modal-close:hover { color: var(--red); border-color: var(--red); }
+.m-field { margin-bottom: 1.2rem; }
+.m-field label {
+  font-family: 'Share Tech Mono', monospace; font-size: .7rem;
+  color: var(--muted2); letter-spacing: 1px; display: block; margin-bottom: .4rem;
+}
+.m-field input, .m-field select, .m-field textarea {
+  width: 100%; background: rgba(255,255,255,.03); border: 1px solid var(--border2);
+  border-radius: 3px; padding: .75rem 1rem; color: var(--white);
+  font-family: 'Rajdhani', sans-serif; font-size: 1rem; outline: none;
+  transition: border-color .3s;
+}
+.m-field input:focus, .m-field select:focus, .m-field textarea:focus { border-color: var(--teal); }
+.m-field select option { background: #14141a; }
+.m-field textarea { resize: vertical; min-height: 90px; }
+.m-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.modal-actions { display: flex; justify-content: flex-end; gap: .8rem; margin-top: 1.5rem; }
+.btn-modal-save {
+  background: linear-gradient(135deg, var(--teal), var(--blue));
+  border: none; color: var(--bg); font-family: 'Share Tech Mono', monospace;
+  font-size: .8rem; letter-spacing: 1px; padding: .7rem 1.8rem; border-radius: 3px;
+  cursor: pointer; transition: opacity .3s;
+}
+.btn-modal-save:hover { opacity: .85; }
+
+/* IMAGE UPLOAD */
+.img-upload-zone {
+  border: 2px dashed var(--border2); border-radius: 4px;
+  padding: 2rem; text-align: center; cursor: pointer;
+  transition: border-color .3s, background .3s;
+  position: relative;
+}
+.img-upload-zone:hover, .img-upload-zone.drag { border-color: var(--teal); background: rgba(61,214,245,.03); }
+.img-upload-zone input[type=file] {
+  position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+}
+.img-upload-icon { font-size: 2rem; margin-bottom: .5rem; }
+.img-upload-label {
+  font-family: 'Share Tech Mono', monospace; font-size: .75rem;
+  color: var(--muted2); letter-spacing: 1px;
+}
+.img-preview {
+  width: 100%; max-height: 160px; object-fit: cover;
+  border-radius: 3px; margin-top: .8rem; display: none;
+}
+
+/* CLIENTS GRID */
+.clients-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr));
+  gap: 1.2rem; margin-top: 1.5rem;
+}
+.client-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 6px; overflow: hidden; transition: border-color .3s, transform .3s;
+}
+.client-card:hover { border-color: rgba(61,214,245,.25); transform: translateY(-2px); }
+.client-img {
+  width: 100%; height: 160px; object-fit: cover;
+  background: var(--surface); display: flex; align-items: center; justify-content: center;
+  font-size: 2.5rem; color: var(--muted);
+}
+.client-img img { width: 100%; height: 100%; object-fit: cover; }
+.client-body { padding: 1.2rem; }
+.client-name {
+  font-family: 'Orbitron', monospace; font-size: .85rem;
+  color: var(--gold); margin-bottom: .2rem;
+}
+.client-company {
+  font-family: 'Share Tech Mono', monospace; font-size: .7rem;
+  color: var(--muted2); letter-spacing: 1px; margin-bottom: .8rem;
+}
+.client-review { font-size: .9rem; color: rgba(232,234,240,.6); line-height: 1.5; margin-bottom: 1rem; }
+.client-stars { color: var(--gold); font-size: .9rem; margin-bottom: .8rem; }
+.client-actions { display: flex; gap: .5rem; }
+
+/* APPT DETAIL */
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; }
+.detail-item { background: var(--surface); border-radius: 3px; padding: .8rem 1rem; }
+.detail-item label {
+  font-family: 'Share Tech Mono', monospace; font-size: .65rem;
+  color: var(--muted2); letter-spacing: 1px; display: block; margin-bottom: .2rem;
+}
+.detail-item span { font-size: .95rem; color: var(--white); }
+
+/* STATUS CHANGE */
+.status-select {
+  background: var(--card2); border: 1px solid var(--border2);
+  color: var(--white); font-family: 'Share Tech Mono', monospace;
+  font-size: .72rem; padding: .3rem .6rem; border-radius: 2px; outline: none; cursor: pointer;
+}
+
+/* EMPTY STATE */
+.empty-state {
+  text-align: center; padding: 4rem 2rem;
+  font-family: 'Share Tech Mono', monospace;
+  color: var(--muted); font-size: .8rem; letter-spacing: 1px;
+}
+.empty-state .empty-icon { font-size: 3rem; margin-bottom: 1rem; opacity: .4; }
+
+/* TOAST */
+#toast {
+  position: fixed; bottom: 2rem; right: 2rem;
+  background: var(--card); border: 1px solid var(--green);
+  color: var(--green); font-family: 'Share Tech Mono', monospace;
+  font-size: .8rem; letter-spacing: 1px; padding: .8rem 1.5rem;
+  border-radius: 4px; z-index: 9999;
+  transform: translateY(100px); opacity: 0;
+  transition: all .4s; box-shadow: 0 0 20px rgba(34,212,160,.2);
+}
+#toast.show { transform: translateY(0); opacity: 1; }
+
+/* SEARCH */
+.search-box {
+  background: var(--card); border: 1px solid var(--border2);
+  color: var(--white); font-family: 'Share Tech Mono', monospace;
+  font-size: .8rem; padding: .5rem 1rem; border-radius: 3px; outline: none;
+  width: 220px; transition: border-color .3s; letter-spacing: 1px;
+}
+.search-box:focus { border-color: var(--teal); }
+.search-box::placeholder { color: var(--muted); }
+
+/* NOTIF CARD */
+.notif-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 6px; padding: 1.2rem 1.5rem;
+  display: flex; align-items: flex-start; gap: 1rem;
+  transition: border-color .3s;
+}
+.notif-card.unread { border-left: 3px solid var(--teal); }
+.notif-card.unread-gold { border-left: 3px solid var(--gold); }
+.notif-icon {
+  font-size: 1.5rem; width: 44px; height: 44px; flex-shrink: 0;
+  background: rgba(61,214,245,.08); border: 1px solid rgba(61,214,245,.15);
+  border-radius: 4px; display: flex; align-items: center; justify-content: center;
+}
+.notif-body { flex: 1; }
+.notif-title { font-weight: 600; font-size: 1rem; margin-bottom: .2rem; }
+.notif-meta {
+  font-family: 'Share Tech Mono', monospace; font-size: .7rem;
+  color: var(--muted2); letter-spacing: 1px;
+}
+.notif-actions { display: flex; gap: .5rem; align-self: center; }
+
+/* GALLERY STATUS */
+.g-status-done { color: var(--green); }
+.g-status-prog { color: var(--gold); }
+.g-status-paus { color: var(--muted2); }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .sidebar { width: 60px; }
+  .sb-item span, .sb-section-title, .sb-logo small, .sb-footer { display: none; }
+  .sb-logo { font-size: .7rem; text-align: center; }
+  .main { margin-left: 60px; }
+  .stats-row { grid-template-columns: 1fr 1fr; }
+  .view { padding: 1.5rem 1rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ LOGIN ═══ -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo"><span>FAB</span>-VISUAL</div>
+    <div class="login-sub">ADMIN PANEL // ACCESO RESTRINGIDO</div>
+    <div class="lf-group">
+      <label>USUARIO</label>
+      <input type="text" id="lUser" placeholder="admin" autocomplete="off">
+    </div>
+    <div class="lf-group">
+      <label>CONTRASEÑA</label>
+      <input type="password" id="lPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="login-btn" onclick="doLogin()">> INICIAR SESIÓN<span class="cursor-blink"></span></button>
+    <div class="login-err" id="loginErr">⚠ Credenciales incorrectas</div>
+  </div>
+</div>
+
+<!-- ═══ ADMIN SHELL ═══ -->
+<div id="adminShell">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sb-logo"><span>FAB</span>-VISUAL<small>ADMIN PANEL</small></div>
+    <nav class="sb-nav">
+      <div class="sb-section-title">PRINCIPAL</div>
+      <div class="sb-item active" onclick="showView('dashboard',this)">
+        <span class="sb-icon">⚡</span><span>Dashboard</span>
+      </div>
+      <div class="sb-section-title">CITAS & MENSAJES</div>
+      <div class="sb-item" onclick="showView('appointments',this)">
+        <span class="sb-icon">📅</span><span>Citas</span>
+        <span class="sb-badge" id="apptBadge">0</span>
+      </div>
+      <div class="sb-item" onclick="showView('messages',this)">
+        <span class="sb-icon">✉️</span><span>Mensajes</span>
+        <span class="sb-badge gold" id="msgBadge">0</span>
+      </div>
+      <div class="sb-section-title">CONTENIDO</div>
+      <div class="sb-item" onclick="showView('clients',this)">
+        <span class="sb-icon">⭐</span><span>Clientes Satisfechos</span>
+      </div>
+      <div class="sb-item" onclick="showView('gallery',this)">
+        <span class="sb-icon">🖼️</span><span>Galería de Proyectos</span>
+      </div>
+      <div class="sb-section-title">ALERTAS</div>
+      <div class="sb-item" onclick="showView('notifications',this)">
+        <span class="sb-icon">🔔</span><span>Notificaciones</span>
+        <span class="sb-badge" id="notifBadge" style="background:var(--red);">0</span>
+      </div>
+    </nav>
+    <div class="sb-footer">
+      <div>Lloammes Fabre</div>
+      <div class="logout-btn" onclick="doLogout()">⏻ Cerrar sesión</div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div>
+        <div class="topbar-title" id="topTitle">DASHBOARD</div>
+        <div class="topbar-meta" id="topMeta">Resumen general del sistema</div>
+      </div>
+      <div class="topbar-status">
+        <div class="status-dot"></div>
+        SISTEMA EN LÍNEA
+      </div>
+    </div>
+
+    <!-- ── DASHBOARD ── -->
+    <div class="view active" id="view-dashboard">
+      <div class="stats-row">
+        <div class="stat-card teal">
+          <div class="stat-num" id="ds-appts">0</div>
+          <div class="stat-label">CITAS TOTALES</div>
+          <div class="stat-icon">📅</div>
+        </div>
+        <div class="stat-card gold">
+          <div class="stat-num" id="ds-pending">0</div>
+          <div class="stat-label">PENDIENTES</div>
+          <div class="stat-icon">⏳</div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-num" id="ds-clients">0</div>
+          <div class="stat-label">CLIENTES SATISFECHOS</div>
+          <div class="stat-icon">⭐</div>
+        </div>
+        <div class="stat-card purple">
+          <div class="stat-num" id="ds-msgs">0</div>
+          <div class="stat-label">MENSAJES</div>
+          <div class="stat-icon">✉️</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+        <!-- Recent appts -->
+        <div class="card-box">
+          <div style="padding:1.2rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-family:'Orbitron',monospace;font-size:.85rem;color:var(--teal);">ÚLTIMAS CITAS</span>
+            <button class="btn-sm btn-teal" onclick="showView('appointments',document.querySelector('[onclick*=appointments]'))">Ver todas</button>
+          </div>
+          <div id="dashAppts" style="padding:.5rem 0;"></div>
+        </div>
+        <!-- Recent messages -->
+        <div class="card-box">
+          <div style="padding:1.2rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-family:'Orbitron',monospace;font-size:.85rem;color:var(--gold);">ÚLTIMOS MENSAJES</span>
+            <button class="btn-sm btn-gold" onclick="showView('messages',document.querySelector('[onclick*=messages]'))">Ver todos</button>
+          </div>
+          <div id="dashMsgs" style="padding:.5rem 0;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── APPOINTMENTS ── -->
+    <div class="view" id="view-appointments">
+      <div class="section-hdr">
+        <h2>CITAS <span>AGENDADAS</span></h2>
+        <div class="action-bar">
+          <input class="search-box" placeholder="Buscar..." oninput="renderAppts(this.value)">
+          <select class="filter-select" onchange="renderAppts('',this.value)">
+            <option value="">Todos los tipos</option>
+            <option>Consulta Gratuita</option>
+            <option>Demo de Software</option>
+            <option>Soporte IT</option>
+            <option>Propuesta de Proyecto</option>
+          </select>
+          <button class="btn-sm btn-teal" onclick="openApptModal()">+ Nueva Cita</button>
+        </div>
+      </div>
+      <div class="card-box">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>NOMBRE</th><th>TIPO</th><th>FECHA</th><th>MODALIDAD</th><th>ESTADO</th><th>ACCIONES</th>
+            </tr>
+          </thead>
+          <tbody id="apptBody"></tbody>
+        </table>
+        <div id="apptEmpty" class="empty-state" style="display:none;">
+          <div class="empty-icon">📅</div>
+          <div>No hay citas registradas</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MESSAGES ── -->
+    <div class="view" id="view-messages">
+      <div class="section-hdr">
+        <h2>MENSAJES <span>RECIBIDOS</span></h2>
+        <div class="action-bar">
+          <input class="search-box" placeholder="Buscar..." oninput="renderMsgs(this.value)">
+          <button class="btn-sm btn-gold" onclick="openMsgModal()">+ Nuevo Mensaje</button>
+        </div>
+      </div>
+      <div class="card-box">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>DE</th><th>EMAIL</th><th>ASUNTO</th><th>FECHA</th><th>ESTADO</th><th>ACCIONES</th>
+            </tr>
+          </thead>
+          <tbody id="msgBody"></tbody>
+        </table>
+        <div id="msgEmpty" class="empty-state" style="display:none;">
+          <div class="empty-icon">✉️</div>
+          <div>No hay mensajes registrados</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CLIENTS ── -->
+    <div class="view" id="view-clients">
+      <div class="section-hdr">
+        <h2>CLIENTES <span>SATISFECHOS</span></h2>
+        <div class="action-bar">
+          <input class="search-box" placeholder="Buscar cliente..." oninput="renderClients(this.value)">
+          <button class="btn-sm btn-green" onclick="openClientModal()">+ Agregar Cliente</button>
+        </div>
+      </div>
+      <div class="clients-grid" id="clientsGrid"></div>
+      <div id="clientEmpty" class="empty-state" style="display:none;">
+        <div class="empty-icon">⭐</div>
+        <div>No hay clientes registrados aún</div>
+      </div>
+    </div>
+
+    <!-- ── NOTIFICATIONS ── -->
+    <div class="view" id="view-notifications">
+      <div class="section-hdr">
+        <h2>NOTIFICACIONES <span>DE CITAS</span></h2>
+        <div class="action-bar">
+          <button class="btn-sm btn-teal" onclick="markAllRead()">✓ Marcar todas como leídas</button>
+          <button class="btn-sm btn-red" onclick="clearNotifs()">Limpiar todo</button>
+        </div>
+      </div>
+      <div id="notifList" style="display:flex;flex-direction:column;gap:.8rem;"></div>
+      <div id="notifEmpty" class="empty-state" style="display:none;">
+        <div class="empty-icon">🔔</div>
+        <div>No hay notificaciones nuevas</div>
+      </div>
+    </div>
+
+    <!-- ── GALLERY ── -->
+    <div class="view" id="view-gallery">
+      <div class="section-hdr">
+        <h2>GALERÍA DE <span>PROYECTOS</span></h2>
+        <div class="action-bar">
+          <input class="search-box" placeholder="Buscar proyecto..." oninput="renderGallery(this.value)">
+          <select class="filter-select" id="galleryCatFilter" onchange="renderGallery('',this.value)">
+            <option value="">Todas las categorías</option>
+            <option>Business Software</option>
+            <option>Automation Systems</option>
+            <option>IT Support</option>
+            <option>App Móvil / Web</option>
+            <option>E-Commerce</option>
+            <option>Dashboard / Reportes</option>
+          </select>
+          <button class="btn-sm btn-teal" onclick="openGalleryModal()">+ Agregar Proyecto</button>
+        </div>
+      </div>
+      <div class="clients-grid" id="galleryGrid"></div>
+      <div id="galleryEmpty" class="empty-state" style="display:none;">
+        <div class="empty-icon">🖼️</div>
+        <div>No hay proyectos en la galería aún</div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /adminShell -->
+
+<!-- ═══ MODAL: CITA ═══ -->
+<div class="modal-overlay" id="apptModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('apptModal')">✕ ESC</button>
+    <h3 id="apptModalTitle">📅 NUEVA CITA</h3>
+    <div class="m-row">
+      <div class="m-field"><label>NOMBRE *</label><input id="a_name" placeholder="Nombre completo"></div>
+      <div class="m-field"><label>EMPRESA</label><input id="a_company" placeholder="Empresa"></div>
+    </div>
+    <div class="m-row">
+      <div class="m-field"><label>EMAIL *</label><input id="a_email" type="email" placeholder="email@ejemplo.com"></div>
+      <div class="m-field"><label>TELÉFONO</label><input id="a_phone" placeholder="(561) 000-0000"></div>
+    </div>
+    <div class="m-row">
+      <div class="m-field">
+        <label>TIPO DE CITA *</label>
+        <select id="a_type">
+          <option>Consulta Gratuita</option>
+          <option>Demo de Software</option>
+          <option>Soporte IT</option>
+          <option>Propuesta de Proyecto</option>
+        </select>
+      </div>
+      <div class="m-field">
+        <label>MODALIDAD *</label>
+        <select id="a_mode">
+          <option>Llamada Telefónica</option>
+          <option>En Persona</option>
+        </select>
+      </div>
+    </div>
+    <div class="m-row">
+      <div class="m-field"><label>FECHA *</label><input id="a_date" type="date"></div>
+      <div class="m-field">
+        <label>ESTADO</label>
+        <select id="a_status">
+          <option>Pendiente</option>
+          <option>Confirmada</option>
+          <option>Completada</option>
+          <option>Cancelada</option>
+        </select>
+      </div>
+    </div>
+    <div class="m-field"><label>NOTAS</label><textarea id="a_notes" placeholder="Observaciones internas..."></textarea></div>
+    <div class="modal-actions">
+      <button class="btn-sm btn-red" onclick="closeModal('apptModal')">Cancelar</button>
+      <button class="btn-modal-save" onclick="saveAppt()"> > GUARDAR CITA</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: MENSAJE ═══ -->
+<div class="modal-overlay" id="msgModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('msgModal')">✕ ESC</button>
+    <h3 id="msgModalTitle">✉️ NUEVO MENSAJE</h3>
+    <div class="m-row">
+      <div class="m-field"><label>NOMBRE *</label><input id="m_name" placeholder="Nombre del remitente"></div>
+      <div class="m-field"><label>EMAIL *</label><input id="m_email" type="email" placeholder="email@ejemplo.com"></div>
+    </div>
+    <div class="m-field"><label>ASUNTO *</label><input id="m_subject" placeholder="Asunto del mensaje"></div>
+    <div class="m-field"><label>MENSAJE *</label><textarea id="m_body" style="min-height:120px;" placeholder="Contenido del mensaje..."></textarea></div>
+    <div class="m-row">
+      <div class="m-field">
+        <label>ESTADO</label>
+        <select id="m_status">
+          <option>No leído</option>
+          <option>Leído</option>
+          <option>Respondido</option>
+          <option>Archivado</option>
+        </select>
+      </div>
+      <div class="m-field"><label>FECHA</label><input id="m_date" type="date"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-sm btn-red" onclick="closeModal('msgModal')">Cancelar</button>
+      <button class="btn-modal-save" onclick="saveMsg()"> > GUARDAR MENSAJE</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: CLIENTE ═══ -->
+<div class="modal-overlay" id="clientModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('clientModal')">✕ ESC</button>
+    <h3 id="clientModalTitle">⭐ AGREGAR CLIENTE SATISFECHO</h3>
+    <div class="m-row">
+      <div class="m-field"><label>NOMBRE DEL CLIENTE *</label><input id="c_name" placeholder="Nombre completo"></div>
+      <div class="m-field"><label>EMPRESA / NEGOCIO</label><input id="c_company" placeholder="Nombre de la empresa"></div>
+    </div>
+    <div class="m-field">
+      <label>IMAGEN DEL PRODUCTO / PROYECTO</label>
+      <div class="img-upload-zone" id="uploadZone">
+        <input type="file" accept="image/*" id="c_imgFile" onchange="previewImg(this)">
+        <div class="img-upload-icon">🖼️</div>
+        <div class="img-upload-label">Haz clic o arrastra una imagen aquí<br><span style="color:var(--muted);font-size:.65rem;">JPG, PNG, WEBP — máx 3MB</span></div>
+        <img class="img-preview" id="imgPreview" src="" alt="preview">
+      </div>
+    </div>
+    <div class="m-field">
+      <label>TESTIMONIO / RESEÑA</label>
+      <textarea id="c_review" placeholder="¿Qué dice el cliente sobre FAB-VISUAL?..."></textarea>
+    </div>
+    <div class="m-row">
+      <div class="m-field">
+        <label>CALIFICACIÓN</label>
+        <select id="c_stars">
+          <option value="5">★★★★★ — Excelente</option>
+          <option value="4">★★★★☆ — Muy bueno</option>
+          <option value="3">★★★☆☆ — Bueno</option>
+        </select>
+      </div>
+      <div class="m-field">
+        <label>SERVICIO CONTRATADO</label>
+        <select id="c_service">
+          <option>Business Software</option>
+          <option>Automation Systems</option>
+          <option>IT Support</option>
+          <option>App Móvil / Web</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-sm btn-red" onclick="closeModal('clientModal')">Cancelar</button>
+      <button class="btn-modal-save" onclick="saveClient()"> > GUARDAR CLIENTE</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: VER DETALLE ═══ -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('detailModal')">✕ ESC</button>
+    <div id="detailContent"></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: PROYECTO GALERÍA ═══ -->
+<div class="modal-overlay" id="galleryModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('galleryModal')">✕ ESC</button>
+    <h3 id="galleryModalTitle">🖼️ AGREGAR PROYECTO</h3>
+    <div class="m-row">
+      <div class="m-field"><label>NOMBRE DEL PROYECTO *</label><input id="g_name" placeholder="Ej: Sistema de Inventario ABC"></div>
+      <div class="m-field"><label>CLIENTE</label><input id="g_client" placeholder="Nombre del cliente"></div>
+    </div>
+    <div class="m-field">
+      <label>CATEGORÍA *</label>
+      <select id="g_category">
+        <option>Business Software</option>
+        <option>Automation Systems</option>
+        <option>IT Support</option>
+        <option>App Móvil / Web</option>
+        <option>E-Commerce</option>
+        <option>Dashboard / Reportes</option>
+      </select>
+    </div>
+    <div class="m-field">
+      <label>IMAGEN DEL PROYECTO</label>
+      <div class="img-upload-zone" id="galleryUploadZone">
+        <input type="file" accept="image/*" id="g_imgFile" onchange="previewGalleryImg(this)">
+        <div class="img-upload-icon">📸</div>
+        <div class="img-upload-label">Haz clic o arrastra una imagen<br><span style="color:var(--muted);font-size:.65rem;">JPG, PNG, WEBP — máx 3MB</span></div>
+        <img class="img-preview" id="galleryImgPreview" src="" alt="preview">
+      </div>
+    </div>
+    <div class="m-field"><label>DESCRIPCIÓN</label><textarea id="g_desc" placeholder="Describe brevemente el proyecto y los resultados..."></textarea></div>
+    <div class="m-row">
+      <div class="m-field"><label>TECNOLOGÍAS</label><input id="g_tech" placeholder="React, Node.js, PostgreSQL..."></div>
+      <div class="m-field">
+        <label>ESTADO</label>
+        <select id="g_status">
+          <option>Completado</option>
+          <option>En Progreso</option>
+          <option>Pausado</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-sm btn-red" onclick="closeModal('galleryModal')">Cancelar</button>
+      <button class="btn-modal-save" onclick="saveGalleryProject()"> > GUARDAR PROYECTO</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+let notifs = [], gallery = [], editGalleryId = null, currentGalleryImg = '';
+
+// ═══════════════════════════════════════════════
+// STORAGE HELPERS
+// ═══════════════════════════════════════════════
+async function storeGet(key) {
+  try { const r = await window.storage.get(key); return r ? JSON.parse(r.value) : null; }
+  catch { return null; }
+}
+async function storeSet(key, val) {
+  try { await window.storage.set(key, JSON.stringify(val)); } catch(e) { console.error(e); }
+}
+
+// ═══════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════
+let appts = [], msgs = [], clients = [];
+let editApptId = null, editMsgId = null, editClientId = null;
+let currentImg = '';
+
+// ═══════════════════════════════════════════════
+// AUTH — credentials: admin / fabvisual2025
+// ═══════════════════════════════════════════════
+function doLogin() {
+  const u = document.getElementById('lUser').value.trim();
+  const p = document.getElementById('lPass').value;
+  if (u === 'admin' && p === 'fabvisual2025') {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('adminShell').style.display = 'flex';
+    initAdmin();
+  } else {
+    const err = document.getElementById('loginErr');
+    err.style.display = 'block';
+    setTimeout(() => err.style.display = 'none', 3000);
+  }
+}
+function doLogout() {
+  document.getElementById('adminShell').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('lPass').value = '';
+}
+document.getElementById('lPass').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+
+// ═══════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════
+async function initAdmin() {
+  appts   = (await storeGet('fv_appts'))   || [];
+  msgs    = (await storeGet('fv_msgs'))    || [];
+  clients = (await storeGet('fv_clients')) || [];
+  notifs  = (await storeGet('fv_notifs'))  || [];
+  gallery = (await storeGet('fv_gallery')) || [];
+  refreshAll();
+}
+
+function refreshAll() {
+  updateBadges();
+  renderDashboard();
+  renderAppts();
+  renderMsgs();
+  renderClients();
+  renderNotifs();
+  renderGallery();
+}
+
+function updateBadges() {
+  const pendingAppts = appts.filter(a=>a.status==='Pendiente').length;
+  document.getElementById('apptBadge').textContent  = pendingAppts;
+  document.getElementById('msgBadge').textContent   = msgs.filter(m=>m.status==='No leído').length;
+  const unreadNotifs = notifs.filter(n=>!n.read).length;
+  document.getElementById('notifBadge').textContent = unreadNotifs;
+  document.getElementById('ds-appts').textContent   = appts.length;
+  document.getElementById('ds-pending').textContent = pendingAppts;
+  document.getElementById('ds-clients').textContent = clients.length;
+  document.getElementById('ds-msgs').textContent    = msgs.length;
+}
+
+// ═══════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════
+const viewMeta = {
+  dashboard:     ['DASHBOARD', 'Resumen general del sistema'],
+  appointments:  ['CITAS AGENDADAS', 'Gestión de citas y reservaciones'],
+  messages:      ['MENSAJES RECIBIDOS', 'Bandeja de entrada'],
+  clients:       ['CLIENTES SATISFECHOS', 'Testimonios y proyectos destacados'],
+  gallery:       ['GALERÍA DE PROYECTOS', 'Portfolio y proyectos realizados'],
+  notifications: ['NOTIFICACIONES', 'Alertas de nuevas citas'],
+};
+function showView(id, el) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(s => s.classList.remove('active'));
+  document.getElementById('view-'+id).classList.add('active');
+  if (el) el.classList.add('active');
+  document.getElementById('topTitle').textContent  = viewMeta[id][0];
+  document.getElementById('topMeta').textContent   = viewMeta[id][1];
+}
+
+// ═══════════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════════
+function renderDashboard() {
+  updateBadges();
+  const da = document.getElementById('dashAppts');
+  const dm = document.getElementById('dashMsgs');
+  const recent5a = [...appts].reverse().slice(0,5);
+  const recent5m = [...msgs].reverse().slice(0,5);
+  da.innerHTML = recent5a.length ? recent5a.map(a=>`
+    <div style="padding:.8rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem;">
+      <div>
+        <div style="font-size:.95rem;font-weight:600;">${a.name}</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--muted2);">${a.type} · ${a.date}</div>
+      </div>
+      ${statusBadge(a.status)}
+    </div>`).join('')
+    : '<div class="empty-state" style="padding:2rem;"><div class="empty-icon">📅</div><div>Sin citas</div></div>';
+  dm.innerHTML = recent5m.length ? recent5m.map(m=>`
+    <div style="padding:.8rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem;">
+      <div>
+        <div style="font-size:.95rem;font-weight:600;">${m.name}</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--muted2);">${m.subject||'Sin asunto'} · ${m.date}</div>
+      </div>
+      ${msgStatusBadge(m.status)}
+    </div>`).join('')
+    : '<div class="empty-state" style="padding:2rem;"><div class="empty-icon">✉️</div><div>Sin mensajes</div></div>';
+}
+
+// ═══════════════════════════════════════════════
+// APPOINTMENTS
+// ═══════════════════════════════════════════════
+function statusBadge(s) {
+  const map = { 'Pendiente':'badge-gold','Confirmada':'badge-teal','Completada':'badge-green','Cancelada':'badge-red' };
+  return `<span class="badge ${map[s]||'badge-teal'}">${s}</span>`;
+}
+function typeBadge(t) {
+  const map = { 'Consulta Gratuita':'badge-teal','Demo de Software':'badge-purple','Soporte IT':'badge-red','Propuesta de Proyecto':'badge-gold' };
+  return `<span class="badge ${map[t]||'badge-teal'}">${t}</span>`;
+}
+
+function renderAppts(search='', filterType='') {
+  let data = [...appts];
+  if (search) data = data.filter(a => (a.name+a.email+a.type+a.company).toLowerCase().includes(search.toLowerCase()));
+  if (filterType) data = data.filter(a => a.type === filterType);
+  data = data.reverse();
+  const tbody = document.getElementById('apptBody');
+  const empty = document.getElementById('apptEmpty');
+  if (!data.length) { tbody.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+  tbody.innerHTML = data.map(a=>`
+    <tr>
+      <td>
+        <div style="font-weight:600;">${a.name}</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--muted2);">${a.email}</div>
+      </td>
+      <td>${typeBadge(a.type)}</td>
+      <td style="font-family:'Share Tech Mono',monospace;font-size:.8rem;">${a.date}</td>
+      <td style="font-size:.85rem;">${a.mode==='Llamada Telefónica'?'📞':'🤝'} ${a.mode}</td>
+      <td>
+        <select class="status-select" onchange="changeApptStatus(${a.id},this.value)">
+          ${['Pendiente','Confirmada','Completada','Cancelada'].map(s=>`<option ${s===a.status?'selected':''}>${s}</option>`).join('')}
+        </select>
+      </td>
+      <td>
+        <div style="display:flex;gap:.4rem;">
+          <button class="btn-sm btn-teal" onclick="viewAppt(${a.id})">Ver</button>
+          <button class="btn-sm btn-gold" onclick="editAppt(${a.id})">Editar</button>
+          <button class="btn-sm btn-red" onclick="deleteAppt(${a.id})">Eliminar</button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+function openApptModal(prefill) {
+  editApptId = null;
+  document.getElementById('apptModalTitle').textContent = '📅 NUEVA CITA';
+  ['a_name','a_company','a_email','a_phone','a_notes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('a_type').value='Consulta Gratuita';
+  document.getElementById('a_mode').value='Llamada Telefónica';
+  document.getElementById('a_status').value='Pendiente';
+  document.getElementById('a_date').value=new Date().toISOString().split('T')[0];
+  if (prefill) { for(const k in prefill) { const el=document.getElementById('a_'+k); if(el) el.value=prefill[k]; } }
+  openModal('apptModal');
+}
+function editAppt(id) {
+  const a = appts.find(x=>x.id===id); if(!a) return;
+  editApptId = id;
+  document.getElementById('apptModalTitle').textContent = '✏️ EDITAR CITA';
+  document.getElementById('a_name').value=a.name;
+  document.getElementById('a_company').value=a.company||'';
+  document.getElementById('a_email').value=a.email;
+  document.getElementById('a_phone').value=a.phone||'';
+  document.getElementById('a_type').value=a.type;
+  document.getElementById('a_mode').value=a.mode;
+  document.getElementById('a_status').value=a.status;
+  document.getElementById('a_date').value=a.date;
+  document.getElementById('a_notes').value=a.notes||'';
+  openModal('apptModal');
+}
+async function saveAppt() {
+  const name=document.getElementById('a_name').value.trim();
+  const email=document.getElementById('a_email').value.trim();
+  const date=document.getElementById('a_date').value;
+  if(!name||!email||!date){alert('Nombre, email y fecha son requeridos.');return;}
+  const obj={
+    id: editApptId||Date.now(), name, email,
+    company:document.getElementById('a_company').value.trim(),
+    phone:document.getElementById('a_phone').value.trim(),
+    type:document.getElementById('a_type').value,
+    mode:document.getElementById('a_mode').value,
+    status:document.getElementById('a_status').value,
+    date, notes:document.getElementById('a_notes').value.trim(),
+    createdAt: editApptId ? (appts.find(a=>a.id===editApptId)||{}).createdAt : new Date().toLocaleDateString('es')
+  };
+  if(editApptId) { appts=appts.map(a=>a.id===editApptId?obj:a); }
+  else { appts.push(obj); addNotif(obj); }
+  await storeSet('fv_appts',appts);
+  closeModal('apptModal'); refreshAll(); toast('✓ Cita guardada exitosamente');
+}
+async function deleteAppt(id) {
+  if(!confirm('¿Eliminar esta cita?')) return;
+  appts=appts.filter(a=>a.id!==id);
+  await storeSet('fv_appts',appts); refreshAll(); toast('✓ Cita eliminada');
+}
+async function changeApptStatus(id,val) {
+  appts=appts.map(a=>a.id===id?{...a,status:val}:a);
+  await storeSet('fv_appts',appts); updateBadges(); renderDashboard(); toast('✓ Estado actualizado');
+}
+function viewAppt(id) {
+  const a=appts.find(x=>x.id===id); if(!a) return;
+  document.getElementById('detailContent').innerHTML=`
+    <h3>📅 DETALLE DE CITA</h3>
+    <div class="detail-grid" style="margin-bottom:1rem;">
+      <div class="detail-item"><label>NOMBRE</label><span>${a.name}</span></div>
+      <div class="detail-item"><label>EMAIL</label><span>${a.email}</span></div>
+      <div class="detail-item"><label>EMPRESA</label><span>${a.company||'—'}</span></div>
+      <div class="detail-item"><label>TELÉFONO</label><span>${a.phone||'—'}</span></div>
+      <div class="detail-item"><label>TIPO DE CITA</label><span>${a.type}</span></div>
+      <div class="detail-item"><label>MODALIDAD</label><span>${a.mode}</span></div>
+      <div class="detail-item"><label>FECHA</label><span>${a.date}</span></div>
+      <div class="detail-item"><label>ESTADO</label><span>${a.status}</span></div>
+    </div>
+    ${a.notes?`<div class="detail-item" style="margin-bottom:1rem;"><label>NOTAS</label><span>${a.notes}</span></div>`:''}
+    <div style="display:flex;justify-content:flex-end;gap:.8rem;margin-top:1.5rem;">
+      <button class="btn-sm btn-gold" onclick="closeModal('detailModal');editAppt(${a.id})">Editar</button>
+      <button class="btn-sm btn-red" onclick="closeModal('detailModal');deleteAppt(${a.id})">Eliminar</button>
+    </div>`;
+  openModal('detailModal');
+}
+
+// ═══════════════════════════════════════════════
+// MESSAGES
+// ═══════════════════════════════════════════════
+function msgStatusBadge(s) {
+  const map={'No leído':'badge-gold','Leído':'badge-teal','Respondido':'badge-green','Archivado':'badge-purple'};
+  return `<span class="badge ${map[s]||'badge-teal'}">${s}</span>`;
+}
+function renderMsgs(search='') {
+  let data=[...msgs];
+  if(search) data=data.filter(m=>(m.name+m.email+m.subject+m.body).toLowerCase().includes(search.toLowerCase()));
+  data=data.reverse();
+  const tbody=document.getElementById('msgBody');
+  const empty=document.getElementById('msgEmpty');
+  if(!data.length){tbody.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';
+  tbody.innerHTML=data.map(m=>`
+    <tr>
+      <td style="font-weight:600;">${m.name}</td>
+      <td style="font-family:'Share Tech Mono',monospace;font-size:.78rem;color:var(--muted2);">${m.email}</td>
+      <td>${m.subject||'Sin asunto'}</td>
+      <td style="font-family:'Share Tech Mono',monospace;font-size:.78rem;">${m.date}</td>
+      <td>
+        <select class="status-select" onchange="changeMsgStatus(${m.id},this.value)">
+          ${['No leído','Leído','Respondido','Archivado'].map(s=>`<option ${s===m.status?'selected':''}>${s}</option>`).join('')}
+        </select>
+      </td>
+      <td>
+        <div style="display:flex;gap:.4rem;">
+          <button class="btn-sm btn-gold" onclick="viewMsg(${m.id})">Ver</button>
+          <button class="btn-sm btn-red" onclick="deleteMsg(${m.id})">Eliminar</button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+function openMsgModal() {
+  editMsgId=null;
+  document.getElementById('msgModalTitle').textContent='✉️ NUEVO MENSAJE';
+  ['m_name','m_email','m_subject','m_body'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('m_status').value='No leído';
+  document.getElementById('m_date').value=new Date().toISOString().split('T')[0];
+  openModal('msgModal');
+}
+async function saveMsg() {
+  const name=document.getElementById('m_name').value.trim();
+  const email=document.getElementById('m_email').value.trim();
+  const subject=document.getElementById('m_subject').value.trim();
+  if(!name||!email||!subject){alert('Nombre, email y asunto son requeridos.');return;}
+  const obj={
+    id:editMsgId||Date.now(), name, email, subject,
+    body:document.getElementById('m_body').value.trim(),
+    status:document.getElementById('m_status').value,
+    date:document.getElementById('m_date').value||new Date().toLocaleDateString('es')
+  };
+  if(editMsgId){msgs=msgs.map(m=>m.id===editMsgId?obj:m);}
+  else{msgs.push(obj);}
+  await storeSet('fv_msgs',msgs);
+  closeModal('msgModal'); refreshAll(); toast('✓ Mensaje guardado');
+}
+async function deleteMsg(id) {
+  if(!confirm('¿Eliminar este mensaje?')) return;
+  msgs=msgs.filter(m=>m.id!==id);
+  await storeSet('fv_msgs',msgs); refreshAll(); toast('✓ Mensaje eliminado');
+}
+async function changeMsgStatus(id,val) {
+  msgs=msgs.map(m=>m.id===id?{...m,status:val}:m);
+  await storeSet('fv_msgs',msgs); updateBadges(); renderDashboard(); toast('✓ Estado actualizado');
+}
+function viewMsg(id) {
+  const m=msgs.find(x=>x.id===id); if(!m) return;
+  document.getElementById('detailContent').innerHTML=`
+    <h3>✉️ MENSAJE COMPLETO</h3>
+    <div class="detail-grid" style="margin-bottom:1rem;">
+      <div class="detail-item"><label>DE</label><span>${m.name}</span></div>
+      <div class="detail-item"><label>EMAIL</label><span>${m.email}</span></div>
+      <div class="detail-item"><label>FECHA</label><span>${m.date}</span></div>
+      <div class="detail-item"><label>ESTADO</label><span>${m.status}</span></div>
+    </div>
+    <div class="detail-item" style="margin-bottom:1rem;"><label>ASUNTO</label><span>${m.subject||'Sin asunto'}</span></div>
+    ${m.body?`<div class="detail-item" style="margin-bottom:1.5rem;"><label>MENSAJE</label><span style="white-space:pre-wrap;">${m.body}</span></div>`:''}
+    <div style="display:flex;justify-content:flex-end;gap:.8rem;">
+      <a href="mailto:${m.email}?subject=Re: ${m.subject||''}" class="btn-sm btn-teal" style="text-decoration:none;">Responder por Email</a>
+      <button class="btn-sm btn-red" onclick="closeModal('detailModal');deleteMsg(${m.id})">Eliminar</button>
+    </div>`;
+  openModal('detailModal');
+  // Auto-mark as read
+  if(m.status==='No leído') changeMsgStatus(id,'Leído');
+}
+
+// ═══════════════════════════════════════════════
+// CLIENTS
+// ═══════════════════════════════════════════════
+function renderClients(search='') {
+  let data=[...clients];
+  if(search) data=data.filter(c=>(c.name+c.company+c.review+c.service).toLowerCase().includes(search.toLowerCase()));
+  const grid=document.getElementById('clientsGrid');
+  const empty=document.getElementById('clientEmpty');
+  if(!data.length){grid.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';
+  grid.innerHTML=data.map(c=>`
+    <div class="client-card">
+      <div class="client-img">
+        ${c.img?`<img src="${c.img}" alt="${c.name}">`:'🖼️'}
+      </div>
+      <div class="client-body">
+        <div class="client-name">${c.name}</div>
+        <div class="client-company">${c.company||'Cliente Particular'} · ${c.service}</div>
+        <div class="client-stars">${'★'.repeat(+c.stars)}${'☆'.repeat(5-+c.stars)}</div>
+        ${c.review?`<div class="client-review">"${c.review}"</div>`:''}
+        <div class="client-actions">
+          <button class="btn-sm btn-gold" onclick="editClient(${c.id})">Editar</button>
+          <button class="btn-sm btn-red" onclick="deleteClient(${c.id})">Eliminar</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+function openClientModal() {
+  editClientId=null; currentImg='';
+  document.getElementById('clientModalTitle').textContent='⭐ AGREGAR CLIENTE SATISFECHO';
+  ['c_name','c_company','c_review'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('c_stars').value='5';
+  document.getElementById('c_service').value='Business Software';
+  document.getElementById('imgPreview').style.display='none';
+  document.getElementById('imgPreview').src='';
+  document.getElementById('c_imgFile').value='';
+  openModal('clientModal');
+}
+function editClient(id) {
+  const c=clients.find(x=>x.id===id); if(!c) return;
+  editClientId=id; currentImg=c.img||'';
+  document.getElementById('clientModalTitle').textContent='✏️ EDITAR CLIENTE';
+  document.getElementById('c_name').value=c.name;
+  document.getElementById('c_company').value=c.company||'';
+  document.getElementById('c_review').value=c.review||'';
+  document.getElementById('c_stars').value=c.stars||'5';
+  document.getElementById('c_service').value=c.service||'Business Software';
+  const prev=document.getElementById('imgPreview');
+  if(c.img){prev.src=c.img;prev.style.display='block';}
+  else{prev.style.display='none';}
+  openModal('clientModal');
+}
+async function saveClient() {
+  const name=document.getElementById('c_name').value.trim();
+  if(!name){alert('El nombre es requerido.');return;}
+  const obj={
+    id:editClientId||Date.now(), name,
+    company:document.getElementById('c_company').value.trim(),
+    review:document.getElementById('c_review').value.trim(),
+    stars:document.getElementById('c_stars').value,
+    service:document.getElementById('c_service').value,
+    img:currentImg,
+    createdAt:new Date().toLocaleDateString('es')
+  };
+  if(editClientId){clients=clients.map(c=>c.id===editClientId?obj:c);}
+  else{clients.push(obj);}
+  await storeSet('fv_clients',clients);
+  closeModal('clientModal'); refreshAll(); toast('✓ Cliente guardado');
+}
+async function deleteClient(id) {
+  if(!confirm('¿Eliminar este cliente?')) return;
+  clients=clients.filter(c=>c.id!==id);
+  await storeSet('fv_clients',clients); refreshAll(); toast('✓ Cliente eliminado');
+}
+function previewImg(input) {
+  const file=input.files[0]; if(!file) return;
+  if(file.size>3*1024*1024){alert('La imagen es muy grande. Máximo 3MB.');return;}
+  const reader=new FileReader();
+  reader.onload=e=>{
+    currentImg=e.target.result;
+    const prev=document.getElementById('imgPreview');
+    prev.src=currentImg; prev.style.display='block';
+  };
+  reader.readAsDataURL(file);
+}
+
+// ═══════════════════════════════════════════════
+// NOTIFICATIONS
+// ═══════════════════════════════════════════════
+async function addNotif(appt) {
+  const n = {
+    id: Date.now(), read: false,
+    title: `Nueva cita: ${appt.type}`,
+    desc: `${appt.name} · ${appt.date} · ${appt.mode}`,
+    apptId: appt.id,
+    time: new Date().toLocaleString('es')
+  };
+  notifs.unshift(n);
+  await storeSet('fv_notifs', notifs);
+  updateBadges(); renderNotifs();
+}
+
+function renderNotifs() {
+  const list = document.getElementById('notifList');
+  const empty = document.getElementById('notifEmpty');
+  if (!list) return;
+  if (!notifs.length) { list.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+  list.innerHTML = notifs.map(n=>`
+    <div class="notif-card ${n.read?'':'unread'}">
+      <div class="notif-icon">${n.read?'🔕':'🔔'}</div>
+      <div class="notif-body">
+        <div class="notif-title">${n.title}</div>
+        <div style="font-size:.9rem;color:rgba(232,234,240,.6);margin:.2rem 0 .4rem;">${n.desc}</div>
+        <div class="notif-meta">${n.time} ${n.read?'· LEÍDA':' · <span style="color:var(--teal)">NUEVA</span>'}</div>
+      </div>
+      <div class="notif-actions">
+        ${!n.read?`<button class="btn-sm btn-teal" onclick="readNotif(${n.id})">✓ Leída</button>`:''}
+        <button class="btn-sm btn-red" onclick="deleteNotif(${n.id})">✕</button>
+      </div>
+    </div>`).join('');
+}
+
+async function readNotif(id) {
+  notifs = notifs.map(n=>n.id===id?{...n,read:true}:n);
+  await storeSet('fv_notifs',notifs); updateBadges(); renderNotifs();
+}
+async function deleteNotif(id) {
+  notifs = notifs.filter(n=>n.id!==id);
+  await storeSet('fv_notifs',notifs); updateBadges(); renderNotifs();
+}
+async function markAllRead() {
+  notifs = notifs.map(n=>({...n,read:true}));
+  await storeSet('fv_notifs',notifs); updateBadges(); renderNotifs(); toast('✓ Todas marcadas como leídas');
+}
+async function clearNotifs() {
+  if(!confirm('¿Limpiar todas las notificaciones?')) return;
+  notifs=[];
+  await storeSet('fv_notifs',notifs); updateBadges(); renderNotifs(); toast('✓ Notificaciones limpiadas');
+}
+
+// ═══════════════════════════════════════════════
+// GALLERY
+// ═══════════════════════════════════════════════
+function galStatusBadge(s) {
+  if(s==='Completado') return `<span class="badge badge-green">${s}</span>`;
+  if(s==='En Progreso') return `<span class="badge badge-gold">${s}</span>`;
+  return `<span class="badge badge-purple">${s}</span>`;
+}
+
+function renderGallery(search='', cat='') {
+  let data=[...gallery];
+  if(search) data=data.filter(p=>(p.name+p.client+p.desc+p.category).toLowerCase().includes(search.toLowerCase()));
+  if(cat) data=data.filter(p=>p.category===cat);
+  const grid=document.getElementById('galleryGrid');
+  const empty=document.getElementById('galleryEmpty');
+  if(!grid) return;
+  if(!data.length){grid.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';
+  grid.innerHTML=data.map(p=>`
+    <div class="client-card">
+      <div class="client-img">
+        ${p.img?`<img src="${p.img}" alt="${p.name}">`:'📸'}
+      </div>
+      <div class="client-body">
+        <div class="client-name">${p.name}</div>
+        <div class="client-company" style="margin-bottom:.5rem;">${p.client||'Proyecto Interno'}</div>
+        <div style="margin-bottom:.6rem;">${galStatusBadge(p.status)} <span class="badge badge-teal" style="margin-left:.3rem;">${p.category}</span></div>
+        ${p.desc?`<div class="client-review">${p.desc}</div>`:''}
+        ${p.tech?`<div style="font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--muted2);letter-spacing:1px;margin-bottom:.8rem;">${p.tech}</div>`:''}
+        <div class="client-actions">
+          <button class="btn-sm btn-gold" onclick="editGalleryProject(${p.id})">Editar</button>
+          <button class="btn-sm btn-red" onclick="deleteGalleryProject(${p.id})">Eliminar</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function openGalleryModal() {
+  editGalleryId=null; currentGalleryImg='';
+  document.getElementById('galleryModalTitle').textContent='🖼️ AGREGAR PROYECTO';
+  ['g_name','g_client','g_desc','g_tech'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('g_category').value='Business Software';
+  document.getElementById('g_status').value='Completado';
+  document.getElementById('galleryImgPreview').style.display='none';
+  document.getElementById('galleryImgPreview').src='';
+  document.getElementById('g_imgFile').value='';
+  openModal('galleryModal');
+}
+function editGalleryProject(id) {
+  const p=gallery.find(x=>x.id===id); if(!p) return;
+  editGalleryId=id; currentGalleryImg=p.img||'';
+  document.getElementById('galleryModalTitle').textContent='✏️ EDITAR PROYECTO';
+  document.getElementById('g_name').value=p.name;
+  document.getElementById('g_client').value=p.client||'';
+  document.getElementById('g_desc').value=p.desc||'';
+  document.getElementById('g_tech').value=p.tech||'';
+  document.getElementById('g_category').value=p.category;
+  document.getElementById('g_status').value=p.status;
+  const prev=document.getElementById('galleryImgPreview');
+  if(p.img){prev.src=p.img;prev.style.display='block';} else{prev.style.display='none';}
+  openModal('galleryModal');
+}
+async function saveGalleryProject() {
+  const name=document.getElementById('g_name').value.trim();
+  if(!name){alert('El nombre del proyecto es requerido.');return;}
+  const obj={
+    id:editGalleryId||Date.now(), name,
+    client:document.getElementById('g_client').value.trim(),
+    desc:document.getElementById('g_desc').value.trim(),
+    tech:document.getElementById('g_tech').value.trim(),
+    category:document.getElementById('g_category').value,
+    status:document.getElementById('g_status').value,
+    img:currentGalleryImg,
+    createdAt:new Date().toLocaleDateString('es')
+  };
+  if(editGalleryId){gallery=gallery.map(p=>p.id===editGalleryId?obj:p);}
+  else{gallery.push(obj);}
+  await storeSet('fv_gallery',gallery);
+  closeModal('galleryModal'); renderGallery(); toast('✓ Proyecto guardado');
+}
+async function deleteGalleryProject(id) {
+  if(!confirm('¿Eliminar este proyecto?')) return;
+  gallery=gallery.filter(p=>p.id!==id);
+  await storeSet('fv_gallery',gallery); renderGallery(); toast('✓ Proyecto eliminado');
+}
+function previewGalleryImg(input) {
+  const file=input.files[0]; if(!file) return;
+  if(file.size>3*1024*1024){alert('Máximo 3MB.');return;}
+  const reader=new FileReader();
+  reader.onload=e=>{
+    currentGalleryImg=e.target.result;
+    const prev=document.getElementById('galleryImgPreview');
+    prev.src=currentGalleryImg; prev.style.display='block';
+  };
+  reader.readAsDataURL(file);
+}
+
+// ═══════════════════════════════════════════════
+// MODAL HELPERS
+// ═══════════════════════════════════════════════
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(mo=>{
+  mo.addEventListener('click',e=>{if(e.target===mo) mo.classList.remove('open');});
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape') document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'));});
+
+// ═══════════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════════
+let toastTimer;
+function toast(msg) {
+  clearTimeout(toastTimer);
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2800);
+}
+</script>
+</body>
+</html>
