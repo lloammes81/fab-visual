@@ -4,31 +4,37 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FAB-VISUAL | Admin Panel</title>
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #07070a;
-  --surface: #0e0e14;
-  --card: #12121a;
-  --card2: #17171f;
-  --teal: #3dd6f5;
-  --blue: #1a8fc1;
-  --gold: #f0b429;
-  --green: #22d4a0;
-  --red: #f55a5a;
-  --purple: #a78bfa;
-  --white: #e8eaf0;
-  --muted: #4a4e62;
-  --muted2: #6b7089;
-  --border: #1a1c2a;
-  --border2: #232538;
+  --bg: #060608;
+  --surface: #0b0b10;
+  --card: #0f0f16;
+  --card2: #14141e;
+  --teal: #00e5c8;
+  --blue: #2d8cf0;
+  --gold: #f5c542;
+  --green: #18e898;
+  --red: #ff5c73;
+  --purple: #b085f5;
+  --orange: #ff8c42;
+  --white: #eceef5;
+  --muted: #3d4058;
+  --muted2: #636880;
+  --border: #141520;
+  --border2: #1e2030;
+  --sidebar-width: 260px;
+  --topbar-h: 68px;
+  --radius: 10px;
+  --radius-sm: 6px;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
   background: var(--bg); color: var(--white);
-  font-family: 'Rajdhani', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   overflow-x: hidden; min-height: 100vh;
+  font-size: 14px; line-height: 1.5;
 }
 
 /* ═══ LOGIN ═══ */
@@ -40,56 +46,69 @@ body {
   content: '';
   position: absolute; inset: 0;
   background-image:
-    linear-gradient(rgba(61,214,245,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(61,214,245,0.03) 1px, transparent 1px);
-  background-size: 50px 50px;
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0,229,200,0.08), transparent),
+    linear-gradient(rgba(0,229,200,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,200,0.025) 1px, transparent 1px);
+  background-size: auto, 60px 60px, 60px 60px;
+}
+#loginScreen::after {
+  content: '';
+  position: absolute;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(0,229,200,0.04) 0%, transparent 70%);
+  top: 50%; left: 50%; transform: translate(-50%, -50%);
+  pointer-events: none;
 }
 .login-card {
-  background: var(--card); border: 1px solid var(--border2);
-  border-radius: 8px; padding: 3rem 2.5rem; width: 380px;
+  background: rgba(15,15,22,0.95); border: 1px solid var(--border2);
+  border-radius: 16px; padding: 3rem 2.5rem; width: 420px;
   position: relative; overflow: hidden; z-index: 1;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 40px 80px rgba(0,0,0,.6), 0 0 0 1px rgba(0,229,200,0.08);
 }
 .login-card::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, var(--teal), var(--gold));
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--teal), var(--gold), transparent);
 }
 .login-logo {
-  font-family: 'Orbitron', monospace; font-size: 1.4rem; font-weight: 900;
-  color: var(--teal); text-align: center; margin-bottom: .3rem; letter-spacing: 2px;
+  font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800;
+  color: var(--white); text-align: center; margin-bottom: .3rem; letter-spacing: -0.5px;
 }
-.login-logo span { color: var(--gold); }
+.login-logo span { color: var(--teal); }
 .login-sub {
-  font-family: 'Share Tech Mono', monospace; font-size: .7rem;
+  font-family: 'IBM Plex Mono', monospace; font-size: .68rem;
   color: var(--muted2); text-align: center; letter-spacing: 3px; margin-bottom: 2.5rem;
+  text-transform: uppercase;
 }
-.lf-group { margin-bottom: 1.2rem; }
+.lf-group { margin-bottom: 1.4rem; }
 .lf-group label {
-  font-family: 'Share Tech Mono', monospace; font-size: .7rem;
-  color: var(--muted2); letter-spacing: 1px; display: block; margin-bottom: .4rem;
+  font-family: 'IBM Plex Mono', monospace; font-size: .68rem;
+  color: var(--muted2); letter-spacing: 2px; display: block; margin-bottom: .5rem;
+  text-transform: uppercase;
 }
 .lf-group input {
-  width: 100%; background: rgba(255,255,255,.03); border: 1px solid var(--border2);
-  border-radius: 3px; padding: .8rem 1rem; color: var(--white);
-  font-family: 'Share Tech Mono', monospace; font-size: .9rem; outline: none;
-  transition: border-color .3s;
+  width: 100%; background: rgba(255,255,255,.04); border: 1px solid var(--border2);
+  border-radius: 8px; padding: .9rem 1.1rem; color: var(--white);
+  font-family: 'Inter', sans-serif; font-size: .95rem; outline: none;
+  transition: border-color .3s, box-shadow .3s;
 }
-.lf-group input:focus { border-color: var(--teal); }
+.lf-group input:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(0,229,200,.08); }
 .login-btn {
-  width: 100%; padding: .9rem; background: linear-gradient(135deg, var(--teal), var(--blue));
-  border: none; border-radius: 3px; color: var(--bg);
-  font-family: 'Share Tech Mono', monospace; font-size: .85rem; letter-spacing: 2px;
-  cursor: pointer; transition: opacity .3s, box-shadow .3s; margin-top: .5rem;
-  box-shadow: 0 0 20px rgba(61,214,245,.2);
+  width: 100%; padding: 1rem; background: linear-gradient(135deg, var(--teal), #00b8a0);
+  border: none; border-radius: 8px; color: #050508;
+  font-family: 'Inter', sans-serif; font-size: .9rem; font-weight: 700;
+  letter-spacing: .5px; cursor: pointer; transition: all .3s; margin-top: .5rem;
+  box-shadow: 0 0 30px rgba(0,229,200,.25);
 }
-.login-btn:hover { opacity: .9; box-shadow: 0 0 35px rgba(61,214,245,.4); }
+.login-btn:hover { transform: translateY(-1px); box-shadow: 0 0 50px rgba(0,229,200,.4); }
 .login-err {
-  color: var(--red); font-family: 'Share Tech Mono', monospace;
-  font-size: .75rem; text-align: center; margin-top: .8rem; display: none;
+  color: var(--red); font-family: 'IBM Plex Mono', monospace;
+  font-size: .72rem; text-align: center; margin-top: .8rem; display: none;
 }
 .cursor-blink {
-  display: inline-block; width: 8px; height: .9em;
-  background: var(--teal); vertical-align: middle;
-  animation: blink 1s step-end infinite; margin-left: 3px;
+  display: inline-block; width: 2px; height: 1em;
+  background: currentColor; vertical-align: middle;
+  animation: blink 1s step-end infinite; margin-left: 2px;
 }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 
@@ -98,361 +117,399 @@ body {
 
 /* SIDEBAR */
 .sidebar {
-  position: fixed; top: 0; left: 0; bottom: 0; width: 240px;
+  position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-width);
   background: var(--surface); border-right: 1px solid var(--border);
   display: flex; flex-direction: column; z-index: 100;
-  padding: 1.5rem 0;
+  padding: 0;
+  box-shadow: 4px 0 30px rgba(0,0,0,.3);
 }
 .sb-logo {
-  font-family: 'Orbitron', monospace; font-size: 1.1rem; font-weight: 700;
-  color: var(--teal); padding: 0 1.5rem 1.5rem; letter-spacing: 2px;
+  font-family: 'Syne', sans-serif; font-size: 1.15rem; font-weight: 800;
+  color: var(--white); padding: 1.6rem 1.6rem 1.4rem; letter-spacing: -0.3px;
   border-bottom: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: .2rem;
 }
-.sb-logo span { color: var(--gold); }
+.sb-logo span { color: var(--teal); }
 .sb-logo small {
-  display: block; font-family: 'Share Tech Mono', monospace;
-  font-size: .62rem; color: var(--muted2); letter-spacing: 2px; margin-top: .2rem;
+  display: block; font-family: 'IBM Plex Mono', monospace;
+  font-size: .6rem; color: var(--muted2); letter-spacing: 3px; font-weight: 400;
+  text-transform: uppercase;
 }
-.sb-nav { flex: 1; padding: 1.5rem 0; }
+.sb-nav { flex: 1; padding: 1rem 0; overflow-y: auto; }
+.sb-nav::-webkit-scrollbar { width: 3px; }
+.sb-nav::-webkit-scrollbar-track { background: transparent; }
+.sb-nav::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
 .sb-section-title {
-  font-family: 'Share Tech Mono', monospace; font-size: .62rem;
-  color: var(--muted); letter-spacing: 3px; padding: 0 1.5rem .6rem;
-  margin-top: 1rem;
+  font-family: 'IBM Plex Mono', monospace; font-size: .6rem;
+  color: var(--muted); letter-spacing: 3px; padding: 1.2rem 1.6rem .5rem;
+  text-transform: uppercase;
 }
 .sb-item {
-  display: flex; align-items: center; gap: .8rem;
-  padding: .75rem 1.5rem; cursor: pointer;
-  font-family: 'Share Tech Mono', monospace; font-size: .8rem;
-  color: var(--muted2); letter-spacing: 1px;
-  transition: all .2s; border-left: 3px solid transparent;
-  position: relative;
+  display: flex; align-items: center; gap: .9rem;
+  padding: .7rem 1.6rem; cursor: pointer;
+  font-size: .88rem; font-weight: 500;
+  color: var(--muted2);
+  transition: all .18s; border-left: 2px solid transparent;
+  margin: 1px 0;
 }
-.sb-item:hover { color: var(--white); background: rgba(255,255,255,.03); }
-.sb-item.active { color: var(--teal); background: rgba(61,214,245,.05); border-left-color: var(--teal); }
-.sb-item .sb-icon { font-size: 1rem; width: 20px; text-align: center; }
+.sb-item:hover { color: var(--white); background: rgba(255,255,255,.04); }
+.sb-item.active { color: var(--teal); background: rgba(0,229,200,.06); border-left-color: var(--teal); }
+.sb-item .sb-icon { font-size: .95rem; width: 22px; text-align: center; flex-shrink: 0; }
 .sb-badge {
-  margin-left: auto; background: var(--teal); color: var(--bg);
-  font-size: .6rem; padding: .15rem .45rem; border-radius: 10px;
-  font-weight: 700;
+  margin-left: auto; background: var(--teal); color: #050508;
+  font-size: .6rem; padding: .18rem .5rem; border-radius: 20px;
+  font-weight: 700; font-family: 'IBM Plex Mono', monospace; letter-spacing: 0;
 }
-.sb-badge.gold { background: var(--gold); }
+.sb-badge.gold { background: var(--gold); color: #050508; }
 .sb-footer {
-  padding: 1.5rem; border-top: 1px solid var(--border);
-  font-family: 'Share Tech Mono', monospace; font-size: .7rem; color: var(--muted);
+  padding: 1.2rem 1.6rem; border-top: 1px solid var(--border);
+  font-size: .82rem; color: var(--muted2);
 }
+.sb-footer-user {
+  display: flex; align-items: center; gap: .7rem; margin-bottom: .8rem;
+}
+.sb-avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--teal), var(--blue));
+  display: flex; align-items: center; justify-content: center;
+  font-size: .75rem; font-weight: 700; color: #050508; flex-shrink: 0;
+}
+.sb-footer-name { font-weight: 600; color: var(--white); font-size: .85rem; }
+.sb-footer-role { font-size: .72rem; color: var(--muted2); }
 .logout-btn {
   display: flex; align-items: center; gap: .5rem;
-  color: var(--red); cursor: pointer; transition: opacity .2s; font-size: .75rem;
-  margin-top: .5rem;
+  color: var(--muted2); cursor: pointer; transition: color .2s; font-size: .8rem;
+  padding: .5rem .6rem; border-radius: 6px; margin-top: .2rem;
 }
-.logout-btn:hover { opacity: .7; }
+.logout-btn:hover { color: var(--red); background: rgba(255,92,115,.06); }
 
 /* MAIN */
 .main {
-  margin-left: 240px; min-height: 100vh;
+  margin-left: var(--sidebar-width); min-height: 100vh;
   background: var(--bg);
 }
 .topbar {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 1.2rem 2.5rem; background: var(--surface);
+  padding: 0 2.5rem; height: var(--topbar-h);
+  background: rgba(11,11,16,0.95); backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 50;
 }
 .topbar-title {
-  font-family: 'Orbitron', monospace; font-size: .95rem; font-weight: 700;
-  color: var(--white); letter-spacing: 1px;
+  font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 700;
+  color: var(--white); letter-spacing: -0.3px;
 }
 .topbar-meta {
-  font-family: 'Share Tech Mono', monospace; font-size: .75rem; color: var(--muted2);
+  font-size: .78rem; color: var(--muted2); margin-top: .1rem;
 }
 .topbar-status {
-  display: flex; align-items: center; gap: .5rem;
-  font-family: 'Share Tech Mono', monospace; font-size: .75rem; color: var(--green);
+  display: flex; align-items: center; gap: .6rem;
+  font-family: 'IBM Plex Mono', monospace; font-size: .72rem; color: var(--green);
+  background: rgba(24,232,152,.06); border: 1px solid rgba(24,232,152,.15);
+  padding: .4rem .9rem; border-radius: 20px;
 }
 .status-dot {
-  width: 8px; height: 8px; background: var(--green);
+  width: 7px; height: 7px; background: var(--green);
   border-radius: 50%; animation: pulse 2s infinite;
 }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+@keyframes pulse { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(24,232,152,.4)} 50%{opacity:.7;box-shadow:0 0 0 4px rgba(24,232,152,0)} }
 
 /* VIEWS */
-.view { display: none; padding: 2.5rem; animation: fadeIn .3s ease; }
+.view { display: none; padding: 2.5rem 3rem; animation: fadeIn .25s ease; max-width: 1600px; }
 .view.active { display: block; }
-@keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
 
 /* STAT CARDS */
 .stats-row {
-  display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; margin-bottom: 2.5rem;
+  display: grid; grid-template-columns: repeat(4,1fr); gap: 1.2rem; margin-bottom: 2.5rem;
 }
 .stat-card {
   background: var(--card); border: 1px solid var(--border);
-  border-radius: 6px; padding: 1.5rem; position: relative; overflow: hidden;
-  transition: border-color .3s;
+  border-radius: var(--radius); padding: 1.6rem 1.8rem; position: relative; overflow: hidden;
+  transition: border-color .3s, transform .2s;
+}
+.stat-card::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,.02), transparent);
+  pointer-events: none;
 }
 .stat-card::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  border-radius: var(--radius) var(--radius) 0 0;
 }
-.stat-card.teal::before { background: var(--teal); }
-.stat-card.gold::before { background: var(--gold); }
-.stat-card.green::before { background: var(--green); }
-.stat-card.purple::before { background: var(--purple); }
-.stat-card:hover { border-color: var(--border2); }
+.stat-card.teal::before { background: linear-gradient(90deg, var(--teal), transparent); }
+.stat-card.gold::before { background: linear-gradient(90deg, var(--gold), transparent); }
+.stat-card.green::before { background: linear-gradient(90deg, var(--green), transparent); }
+.stat-card.purple::before { background: linear-gradient(90deg, var(--purple), transparent); }
+.stat-card:hover { border-color: var(--border2); transform: translateY(-2px); }
 .stat-num {
-  font-family: 'Orbitron', monospace; font-size: 2.2rem; font-weight: 900;
-  line-height: 1; margin-bottom: .3rem;
+  font-family: 'Syne', sans-serif; font-size: 2.6rem; font-weight: 800;
+  line-height: 1; margin-bottom: .4rem; letter-spacing: -1px;
 }
 .stat-card.teal .stat-num { color: var(--teal); }
 .stat-card.gold .stat-num { color: var(--gold); }
 .stat-card.green .stat-num { color: var(--green); }
 .stat-card.purple .stat-num { color: var(--purple); }
 .stat-label {
-  font-family: 'Share Tech Mono', monospace; font-size: .7rem;
-  color: var(--muted2); letter-spacing: 2px;
+  font-size: .75rem; font-weight: 600; letter-spacing: 1px;
+  color: var(--muted2); text-transform: uppercase;
 }
 .stat-icon {
-  position: absolute; right: 1.2rem; top: 50%; transform: translateY(-50%);
-  font-size: 2rem; opacity: .12;
+  position: absolute; right: 1.4rem; top: 50%; transform: translateY(-50%);
+  font-size: 2.2rem; opacity: .09;
 }
 
 /* SECTION HEADER */
 .section-hdr {
   display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 .section-hdr h2 {
-  font-family: 'Orbitron', monospace; font-size: 1rem; font-weight: 700;
-  color: var(--white); letter-spacing: 1px;
+  font-family: 'Syne', sans-serif; font-size: 1.25rem; font-weight: 800;
+  color: var(--white); letter-spacing: -0.3px;
 }
 .section-hdr h2 span { color: var(--teal); }
 
 /* TABLE */
 .data-table { width: 100%; border-collapse: collapse; }
 .data-table th {
-  font-family: 'Share Tech Mono', monospace; font-size: .68rem;
-  color: var(--muted2); letter-spacing: 2px; text-align: left;
-  padding: .8rem 1rem; border-bottom: 1px solid var(--border);
+  font-size: .7rem; font-weight: 600;
+  color: var(--muted2); letter-spacing: 1.5px; text-align: left; text-transform: uppercase;
+  padding: .9rem 1.2rem; border-bottom: 1px solid var(--border);
   background: var(--surface);
 }
+.data-table th:first-child { border-radius: var(--radius-sm) 0 0 0; }
+.data-table th:last-child { border-radius: 0 var(--radius-sm) 0 0; }
 .data-table td {
-  padding: 1rem; border-bottom: 1px solid var(--border);
-  font-size: .95rem; vertical-align: middle;
+  padding: 1rem 1.2rem; border-bottom: 1px solid rgba(255,255,255,.04);
+  font-size: .9rem; vertical-align: middle; line-height: 1.4;
 }
-.data-table tr:hover td { background: rgba(255,255,255,.015); }
+.data-table tr:hover td { background: rgba(255,255,255,.018); }
 .data-table tr:last-child td { border-bottom: none; }
+
+/* STATUS SELECT */
+.status-select {
+  background: transparent; border: 1px solid var(--border2);
+  color: var(--muted2); font-size: .8rem; padding: .35rem .7rem;
+  border-radius: 6px; cursor: pointer; outline: none;
+  transition: border-color .2s;
+}
+.status-select:hover, .status-select:focus { border-color: var(--teal); color: var(--white); }
+.status-select option { background: #14141e; color: var(--white); }
 
 /* BADGES */
 .badge {
-  font-family: 'Share Tech Mono', monospace; font-size: .65rem;
-  padding: .25rem .7rem; border-radius: 2px; letter-spacing: 1px;
+  font-size: .67rem; font-weight: 700;
+  padding: .28rem .75rem; border-radius: 20px; letter-spacing: .5px; white-space: nowrap;
+  text-transform: uppercase;
 }
-.badge-teal { background: rgba(61,214,245,.1); color: var(--teal); border: 1px solid rgba(61,214,245,.2); }
-.badge-gold { background: rgba(240,180,41,.1); color: var(--gold); border: 1px solid rgba(240,180,41,.2); }
-.badge-green { background: rgba(34,212,160,.1); color: var(--green); border: 1px solid rgba(34,212,160,.2); }
-.badge-red { background: rgba(245,90,90,.1); color: var(--red); border: 1px solid rgba(245,90,90,.2); }
-.badge-purple { background: rgba(167,139,250,.1); color: var(--purple); border: 1px solid rgba(167,139,250,.2); }
+.badge-teal { background: rgba(0,229,200,.1); color: var(--teal); border: 1px solid rgba(0,229,200,.2); }
+.badge-gold { background: rgba(245,197,66,.1); color: var(--gold); border: 1px solid rgba(245,197,66,.2); }
+.badge-green { background: rgba(24,232,152,.1); color: var(--green); border: 1px solid rgba(24,232,152,.2); }
+.badge-red { background: rgba(255,92,115,.1); color: var(--red); border: 1px solid rgba(255,92,115,.2); }
+.badge-purple { background: rgba(176,133,245,.1); color: var(--purple); border: 1px solid rgba(176,133,245,.2); }
+.badge-blue { background: rgba(45,140,240,.1); color: var(--blue); border: 1px solid rgba(45,140,240,.2); }
 
 /* CARD CONTAINER */
 .card-box {
   background: var(--card); border: 1px solid var(--border);
-  border-radius: 6px; overflow: hidden;
+  border-radius: var(--radius); overflow: hidden;
 }
 
 /* BUTTONS */
 .btn-sm {
-  font-family: 'Share Tech Mono', monospace; font-size: .7rem;
-  padding: .4rem .9rem; border-radius: 2px; cursor: pointer;
-  letter-spacing: 1px; border: 1px solid; transition: all .2s;
+  font-size: .78rem; font-weight: 600;
+  padding: .4rem 1rem; border-radius: 6px; cursor: pointer;
+  letter-spacing: .3px; border: 1px solid; transition: all .18s;
+  white-space: nowrap;
 }
-.btn-teal { border-color: var(--teal); color: var(--teal); background: transparent; }
-.btn-teal:hover { background: rgba(61,214,245,.1); }
-.btn-red { border-color: var(--red); color: var(--red); background: transparent; }
-.btn-red:hover { background: rgba(245,90,90,.1); }
-.btn-gold { border-color: var(--gold); color: var(--gold); background: transparent; }
-.btn-gold:hover { background: rgba(240,180,41,.1); }
-.btn-green { border-color: var(--green); color: var(--green); background: transparent; }
-.btn-green:hover { background: rgba(34,212,160,.1); }
+.btn-teal { border-color: rgba(0,229,200,.4); color: var(--teal); background: rgba(0,229,200,.06); }
+.btn-teal:hover { background: rgba(0,229,200,.15); border-color: var(--teal); }
+.btn-red { border-color: rgba(255,92,115,.4); color: var(--red); background: rgba(255,92,115,.06); }
+.btn-red:hover { background: rgba(255,92,115,.15); border-color: var(--red); }
+.btn-gold { border-color: rgba(245,197,66,.4); color: var(--gold); background: rgba(245,197,66,.06); }
+.btn-gold:hover { background: rgba(245,197,66,.15); border-color: var(--gold); }
+.btn-green { border-color: rgba(24,232,152,.4); color: var(--green); background: rgba(24,232,152,.06); }
+.btn-green:hover { background: rgba(24,232,152,.15); border-color: var(--green); }
+.btn-blue { border-color: rgba(45,140,240,.4); color: var(--blue); background: rgba(45,140,240,.06); }
+.btn-blue:hover { background: rgba(45,140,240,.15); border-color: var(--blue); }
 
 /* ACTION BAR */
 .action-bar {
-  display: flex; gap: .8rem; flex-wrap: wrap; align-items: center;
+  display: flex; gap: .7rem; flex-wrap: wrap; align-items: center;
 }
 .filter-select {
   background: var(--card); border: 1px solid var(--border2);
-  color: var(--muted2); font-family: 'Share Tech Mono', monospace;
-  font-size: .75rem; padding: .4rem .8rem; border-radius: 2px; cursor: pointer; outline: none;
-  letter-spacing: 1px;
+  color: var(--muted2); font-size: .82rem; padding: .45rem 1rem; border-radius: 6px;
+  cursor: pointer; outline: none; transition: border-color .2s, color .2s;
 }
 .filter-select:focus { border-color: var(--teal); color: var(--white); }
+.filter-select option { background: #14141e; }
 
 /* MODAL */
 .modal-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,.7);
+  position: fixed; inset: 0; background: rgba(0,0,0,.75);
   display: flex; align-items: center; justify-content: center;
-  z-index: 500; backdrop-filter: blur(4px);
-  opacity: 0; pointer-events: none; transition: opacity .3s;
+  z-index: 500; backdrop-filter: blur(8px);
+  opacity: 0; pointer-events: none; transition: opacity .25s;
 }
 .modal-overlay.open { opacity: 1; pointer-events: all; }
 .modal {
   background: var(--card); border: 1px solid var(--border2);
-  border-radius: 8px; padding: 2.5rem; width: 560px; max-width: 95vw;
+  border-radius: 14px; padding: 2.5rem; width: 580px; max-width: 95vw;
   max-height: 90vh; overflow-y: auto; position: relative;
-  transform: translateY(20px); transition: transform .3s;
+  transform: translateY(16px) scale(.98); transition: transform .25s;
+  box-shadow: 0 40px 80px rgba(0,0,0,.7);
 }
-.modal-overlay.open .modal { transform: translateY(0); }
+.modal-overlay.open .modal { transform: translateY(0) scale(1); }
 .modal::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, var(--teal), var(--gold));
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--teal), var(--gold), transparent);
+  border-radius: 14px 14px 0 0;
 }
 .modal h3 {
-  font-family: 'Orbitron', monospace; font-size: 1rem; color: var(--teal);
-  margin-bottom: 1.8rem; letter-spacing: 1px;
+  font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 800;
+  color: var(--white); margin-bottom: 1.8rem; letter-spacing: -0.2px;
 }
 .modal-close {
   position: absolute; top: 1.2rem; right: 1.2rem;
-  font-family: 'Share Tech Mono', monospace; font-size: .75rem;
-  color: var(--muted2); cursor: pointer; background: none; border: none;
-  transition: color .2s; padding: .3rem .6rem;
-  border: 1px solid var(--border); border-radius: 2px;
+  font-size: .75rem; color: var(--muted2); cursor: pointer;
+  background: rgba(255,255,255,.06); border: 1px solid var(--border2);
+  transition: all .2s; padding: .35rem .7rem; border-radius: 6px;
+  font-family: 'IBM Plex Mono', monospace;
 }
-.modal-close:hover { color: var(--red); border-color: var(--red); }
+.modal-close:hover { color: var(--red); border-color: rgba(255,92,115,.4); background: rgba(255,92,115,.06); }
 .m-field { margin-bottom: 1.2rem; }
 .m-field label {
-  font-family: 'Share Tech Mono', monospace; font-size: .7rem;
-  color: var(--muted2); letter-spacing: 1px; display: block; margin-bottom: .4rem;
+  font-size: .72rem; font-weight: 600; letter-spacing: 1px;
+  color: var(--muted2); display: block; margin-bottom: .45rem; text-transform: uppercase;
 }
 .m-field input, .m-field select, .m-field textarea {
-  width: 100%; background: rgba(255,255,255,.03); border: 1px solid var(--border2);
-  border-radius: 3px; padding: .75rem 1rem; color: var(--white);
-  font-family: 'Rajdhani', sans-serif; font-size: 1rem; outline: none;
-  transition: border-color .3s;
+  width: 100%; background: rgba(255,255,255,.04); border: 1px solid var(--border2);
+  border-radius: 8px; padding: .8rem 1rem; color: var(--white);
+  font-family: 'Inter', sans-serif; font-size: .9rem; outline: none;
+  transition: border-color .3s, box-shadow .3s;
 }
-.m-field input:focus, .m-field select:focus, .m-field textarea:focus { border-color: var(--teal); }
-.m-field select option { background: #14141a; }
+.m-field input:focus, .m-field select:focus, .m-field textarea:focus {
+  border-color: var(--teal); box-shadow: 0 0 0 3px rgba(0,229,200,.07);
+}
+.m-field select option { background: #14141e; }
 .m-field textarea { resize: vertical; min-height: 90px; }
 .m-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-.modal-actions { display: flex; justify-content: flex-end; gap: .8rem; margin-top: 1.5rem; }
+.modal-actions { display: flex; justify-content: flex-end; gap: .7rem; margin-top: 1.5rem; }
 .btn-modal-save {
-  background: linear-gradient(135deg, var(--teal), var(--blue));
-  border: none; color: var(--bg); font-family: 'Share Tech Mono', monospace;
-  font-size: .8rem; letter-spacing: 1px; padding: .7rem 1.8rem; border-radius: 3px;
-  cursor: pointer; transition: opacity .3s;
+  background: linear-gradient(135deg, var(--teal), #00b8a0);
+  border: none; color: #050508; font-size: .85rem; font-weight: 700;
+  padding: .75rem 2rem; border-radius: 8px;
+  cursor: pointer; transition: all .2s;
+  box-shadow: 0 4px 20px rgba(0,229,200,.25);
 }
-.btn-modal-save:hover { opacity: .85; }
+.btn-modal-save:hover { transform: translateY(-1px); box-shadow: 0 6px 30px rgba(0,229,200,.35); }
 
 /* IMAGE UPLOAD */
 .img-upload-zone {
-  border: 2px dashed var(--border2); border-radius: 4px;
+  border: 2px dashed var(--border2); border-radius: 10px;
   padding: 2rem; text-align: center; cursor: pointer;
   transition: border-color .3s, background .3s;
   position: relative;
 }
-.img-upload-zone:hover, .img-upload-zone.drag { border-color: var(--teal); background: rgba(61,214,245,.03); }
+.img-upload-zone:hover, .img-upload-zone.drag { border-color: var(--teal); background: rgba(0,229,200,.04); }
 .img-upload-zone input[type=file] {
   position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
 }
 .img-upload-icon { font-size: 2rem; margin-bottom: .5rem; }
 .img-upload-label {
-  font-family: 'Share Tech Mono', monospace; font-size: .75rem;
-  color: var(--muted2); letter-spacing: 1px;
+  font-size: .78rem; color: var(--muted2); letter-spacing: .5px;
 }
 .img-preview {
   width: 100%; max-height: 160px; object-fit: cover;
-  border-radius: 3px; margin-top: .8rem; display: none;
+  border-radius: 8px; margin-top: .8rem; display: none;
 }
 
 /* CLIENTS GRID */
 .clients-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr));
-  gap: 1.2rem; margin-top: 1.5rem;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr));
+  gap: 1.4rem; margin-top: 1.5rem;
 }
 .client-card {
   background: var(--card); border: 1px solid var(--border);
-  border-radius: 6px; overflow: hidden; transition: border-color .3s, transform .3s;
+  border-radius: var(--radius); overflow: hidden; transition: border-color .3s, transform .25s, box-shadow .25s;
 }
-.client-card:hover { border-color: rgba(61,214,245,.25); transform: translateY(-2px); }
+.client-card:hover { border-color: rgba(0,229,200,.25); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,.4); }
 .client-img {
-  width: 100%; height: 160px; object-fit: cover;
+  width: 100%; height: 170px; object-fit: cover;
   background: var(--surface); display: flex; align-items: center; justify-content: center;
   font-size: 2.5rem; color: var(--muted);
 }
 .client-img img { width: 100%; height: 100%; object-fit: cover; }
-.client-body { padding: 1.2rem; }
+.client-body { padding: 1.3rem; }
 .client-name {
-  font-family: 'Orbitron', monospace; font-size: .85rem;
-  color: var(--gold); margin-bottom: .2rem;
+  font-family: 'Syne', sans-serif; font-size: .95rem; font-weight: 700;
+  color: var(--white); margin-bottom: .2rem;
 }
 .client-company {
-  font-family: 'Share Tech Mono', monospace; font-size: .7rem;
-  color: var(--muted2); letter-spacing: 1px; margin-bottom: .8rem;
+  font-size: .78rem; color: var(--muted2); margin-bottom: .8rem;
 }
-.client-review { font-size: .9rem; color: rgba(232,234,240,.6); line-height: 1.5; margin-bottom: 1rem; }
+.client-review { font-size: .88rem; color: rgba(236,238,245,.55); line-height: 1.6; margin-bottom: 1rem; }
 .client-stars { color: var(--gold); font-size: .9rem; margin-bottom: .8rem; }
 .client-actions { display: flex; gap: .5rem; }
 
 /* APPT DETAIL */
 .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; }
-.detail-item { background: var(--surface); border-radius: 3px; padding: .8rem 1rem; }
+.detail-item { background: var(--surface); border-radius: 8px; padding: .9rem 1.1rem; border: 1px solid var(--border); }
 .detail-item label {
-  font-family: 'Share Tech Mono', monospace; font-size: .65rem;
-  color: var(--muted2); letter-spacing: 1px; display: block; margin-bottom: .2rem;
+  font-size: .65rem; font-weight: 700; letter-spacing: 1.5px;
+  color: var(--muted2); display: block; margin-bottom: .3rem; text-transform: uppercase;
 }
-.detail-item span { font-size: .95rem; color: var(--white); }
-
-/* STATUS CHANGE */
-.status-select {
-  background: var(--card2); border: 1px solid var(--border2);
-  color: var(--white); font-family: 'Share Tech Mono', monospace;
-  font-size: .72rem; padding: .3rem .6rem; border-radius: 2px; outline: none; cursor: pointer;
-}
+.detail-item span { font-size: .92rem; color: var(--white); }
 
 /* EMPTY STATE */
 .empty-state {
-  text-align: center; padding: 4rem 2rem;
-  font-family: 'Share Tech Mono', monospace;
-  color: var(--muted); font-size: .8rem; letter-spacing: 1px;
+  text-align: center; padding: 5rem 2rem;
+  color: var(--muted); font-size: .85rem;
 }
-.empty-state .empty-icon { font-size: 3rem; margin-bottom: 1rem; opacity: .4; }
+.empty-state .empty-icon { font-size: 3rem; margin-bottom: 1rem; opacity: .3; }
 
 /* TOAST */
 #toast {
   position: fixed; bottom: 2rem; right: 2rem;
-  background: var(--card); border: 1px solid var(--green);
-  color: var(--green); font-family: 'Share Tech Mono', monospace;
-  font-size: .8rem; letter-spacing: 1px; padding: .8rem 1.5rem;
-  border-radius: 4px; z-index: 9999;
+  background: var(--card); border: 1px solid rgba(24,232,152,.3);
+  color: var(--green); font-size: .82rem; font-weight: 500;
+  padding: .9rem 1.6rem; border-radius: 10px; z-index: 9999;
   transform: translateY(100px); opacity: 0;
-  transition: all .4s; box-shadow: 0 0 20px rgba(34,212,160,.2);
+  transition: all .35s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow: 0 8px 30px rgba(0,0,0,.5), 0 0 20px rgba(24,232,152,.1);
 }
 #toast.show { transform: translateY(0); opacity: 1; }
 
 /* SEARCH */
 .search-box {
   background: var(--card); border: 1px solid var(--border2);
-  color: var(--white); font-family: 'Share Tech Mono', monospace;
-  font-size: .8rem; padding: .5rem 1rem; border-radius: 3px; outline: none;
-  width: 220px; transition: border-color .3s; letter-spacing: 1px;
+  color: var(--white); font-size: .85rem;
+  padding: .5rem 1rem; border-radius: 8px; outline: none;
+  width: 240px; transition: border-color .3s, box-shadow .3s;
 }
-.search-box:focus { border-color: var(--teal); }
+.search-box:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(0,229,200,.07); }
 .search-box::placeholder { color: var(--muted); }
 
 /* NOTIF CARD */
 .notif-card {
   background: var(--card); border: 1px solid var(--border);
-  border-radius: 6px; padding: 1.2rem 1.5rem;
-  display: flex; align-items: flex-start; gap: 1rem;
-  transition: border-color .3s;
+  border-radius: var(--radius); padding: 1.3rem 1.6rem;
+  display: flex; align-items: flex-start; gap: 1.1rem;
+  transition: border-color .3s, transform .2s;
 }
+.notif-card:hover { transform: translateX(2px); }
 .notif-card.unread { border-left: 3px solid var(--teal); }
 .notif-card.unread-gold { border-left: 3px solid var(--gold); }
 .notif-icon {
-  font-size: 1.5rem; width: 44px; height: 44px; flex-shrink: 0;
-  background: rgba(61,214,245,.08); border: 1px solid rgba(61,214,245,.15);
-  border-radius: 4px; display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; width: 46px; height: 46px; flex-shrink: 0;
+  background: rgba(0,229,200,.07); border: 1px solid rgba(0,229,200,.12);
+  border-radius: 10px; display: flex; align-items: center; justify-content: center;
 }
 .notif-body { flex: 1; }
-.notif-title { font-weight: 600; font-size: 1rem; margin-bottom: .2rem; }
+.notif-title { font-weight: 600; font-size: .95rem; margin-bottom: .25rem; }
 .notif-meta {
-  font-family: 'Share Tech Mono', monospace; font-size: .7rem;
-  color: var(--muted2); letter-spacing: 1px;
+  font-size: .75rem; color: var(--muted2); letter-spacing: .3px;
 }
 .notif-actions { display: flex; gap: .5rem; align-self: center; }
 
@@ -461,12 +518,27 @@ body {
 .g-status-prog { color: var(--gold); }
 .g-status-paus { color: var(--muted2); }
 
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
 /* RESPONSIVE */
+@media (max-width: 1100px) {
+  .view { padding: 2rem 2rem; }
+}
 @media (max-width: 900px) {
-  .sidebar { width: 60px; }
-  .sb-item span, .sb-section-title, .sb-logo small, .sb-footer { display: none; }
-  .sb-logo { font-size: .7rem; text-align: center; }
-  .main { margin-left: 60px; }
+  .sidebar { width: 64px; }
+  :root { --sidebar-width: 64px; }
+  .sb-item span, .sb-section-title, .sb-logo small, .sb-footer-name,
+  .sb-footer-role, .sb-footer-user > *:not(.sb-avatar) { display: none; }
+  .sb-logo { justify-content: center; padding: 1.2rem .5rem; font-size: .6rem; }
+  .sb-item { padding: .8rem; justify-content: center; }
+  .sb-item .sb-icon { width: auto; }
+  .sb-badge { position: absolute; top: 6px; right: 6px; font-size: .5rem; padding: .1rem .3rem; }
+  .sb-item { position: relative; }
+  .sb-footer { padding: .8rem .5rem; }
   .stats-row { grid-template-columns: 1fr 1fr; }
   .view { padding: 1.5rem 1rem; }
 }
@@ -478,7 +550,7 @@ body {
 <div id="loginScreen">
   <div class="login-card">
     <div class="login-logo"><span>FAB</span>-VISUAL</div>
-    <div class="login-sub">ADMIN PANEL // ACCESO RESTRINGIDO</div>
+    <div class="login-sub">Panel de Administración</div>
     <div class="lf-group">
       <label>USUARIO</label>
       <input type="text" id="lUser" placeholder="admin" autocomplete="off">
@@ -497,13 +569,13 @@ body {
 
   <!-- SIDEBAR -->
   <div class="sidebar">
-    <div class="sb-logo"><span>FAB</span>-VISUAL<small>ADMIN PANEL</small></div>
+    <div class="sb-logo"><span>FAB</span>-VISUAL<small>Admin Panel</small></div>
     <nav class="sb-nav">
-      <div class="sb-section-title">PRINCIPAL</div>
+      <div class="sb-section-title">Principal</div>
       <div class="sb-item active" onclick="showView('dashboard',this)">
         <span class="sb-icon">⚡</span><span>Dashboard</span>
       </div>
-      <div class="sb-section-title">CITAS & MENSAJES</div>
+      <div class="sb-section-title">Citas & Mensajes</div>
       <div class="sb-item" onclick="showView('appointments',this)">
         <span class="sb-icon">📅</span><span>Citas</span>
         <span class="sb-badge" id="apptBadge">0</span>
@@ -512,14 +584,14 @@ body {
         <span class="sb-icon">✉️</span><span>Mensajes</span>
         <span class="sb-badge gold" id="msgBadge">0</span>
       </div>
-      <div class="sb-section-title">CONTENIDO</div>
+      <div class="sb-section-title">Contenido</div>
       <div class="sb-item" onclick="showView('clientes',this)">
         <span class="sb-icon">👥</span><span>Clientes</span>
-        <span class="sb-badge" id="clientesBadge" style="background:var(--blue);">0</span>
+        <span class="sb-badge" id="clientesBadge" style="background:var(--blue);color:#fff;">0</span>
       </div>
       <div class="sb-item" onclick="showView('invoices',this)">
         <span class="sb-icon">🧾</span><span>Facturas</span>
-        <span class="sb-badge" id="invoicesBadge" style="background:var(--gold);color:#000;">0</span>
+        <span class="sb-badge" id="invoicesBadge" style="background:var(--gold);color:#050508;">0</span>
       </div>
       <div class="sb-item" onclick="showView('clients',this)">
         <span class="sb-icon">⭐</span><span>Clientes Satisfechos</span>
@@ -527,12 +599,12 @@ body {
       <div class="sb-item" onclick="showView('gallery',this)">
         <span class="sb-icon">🖼️</span><span>Galería de Proyectos</span>
       </div>
-      <div class="sb-section-title">ALERTAS</div>
+      <div class="sb-section-title">Alertas</div>
       <div class="sb-item" onclick="showView('notifications',this)">
         <span class="sb-icon">🔔</span><span>Notificaciones</span>
         <span class="sb-badge" id="notifBadge" style="background:var(--red);">0</span>
       </div>
-      <div class="sb-section-title">CONFIGURACIÓN</div>
+      <div class="sb-section-title">Configuración</div>
       <div class="sb-item" onclick="showView('stats',this)">
         <span class="sb-icon">📊</span><span>Resultados / Stats</span>
       </div>
@@ -544,8 +616,14 @@ body {
       </div>
     </nav>
     <div class="sb-footer">
-      <div>Lloammes Fabre</div>
-      <div class="logout-btn" onclick="doLogout()">⏻ Cerrar sesión</div>
+      <div class="sb-footer-user">
+        <div class="sb-avatar">LF</div>
+        <div>
+          <div class="sb-footer-name">Lloammes Fabre</div>
+          <div class="sb-footer-role">Administrador</div>
+        </div>
+      </div>
+      <div class="logout-btn" onclick="doLogout()">⏻ &nbsp;Cerrar sesión</div>
     </div>
   </div>
 
@@ -554,12 +632,12 @@ body {
     <!-- TOPBAR -->
     <div class="topbar">
       <div>
-        <div class="topbar-title" id="topTitle">DASHBOARD</div>
+        <div class="topbar-title" id="topTitle">Dashboard</div>
         <div class="topbar-meta" id="topMeta">Resumen general del sistema</div>
       </div>
       <div class="topbar-status">
         <div class="status-dot"></div>
-        SISTEMA EN LÍNEA
+        Sistema en línea
       </div>
     </div>
 
@@ -592,7 +670,7 @@ body {
         <!-- Recent appts -->
         <div class="card-box">
           <div style="padding:1.2rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
-            <span style="font-family:'Orbitron',monospace;font-size:.85rem;color:var(--teal);">ÚLTIMAS CITAS</span>
+            <span style="font-family:'Syne',sans-serif;font-size:.85rem;color:var(--teal);">ÚLTIMAS CITAS</span>
             <button class="btn-sm btn-teal" onclick="showView('appointments',document.querySelector('[onclick*=appointments]'))">Ver todas</button>
           </div>
           <div id="dashAppts" style="padding:.5rem 0;"></div>
@@ -600,7 +678,7 @@ body {
         <!-- Recent messages -->
         <div class="card-box">
           <div style="padding:1.2rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
-            <span style="font-family:'Orbitron',monospace;font-size:.85rem;color:var(--gold);">ÚLTIMOS MENSAJES</span>
+            <span style="font-family:'Syne',sans-serif;font-size:.85rem;color:var(--gold);">ÚLTIMOS MENSAJES</span>
             <button class="btn-sm btn-gold" onclick="showView('messages',document.querySelector('[onclick*=messages]'))">Ver todos</button>
           </div>
           <div id="dashMsgs" style="padding:.5rem 0;"></div>
@@ -789,7 +867,7 @@ body {
       </div>
       <div class="card-box" style="max-width:780px;">
         <div style="padding:1.2rem 1.5rem;border-bottom:1px solid var(--border);">
-          <span style="font-family:'Share Tech Mono',monospace;font-size:.75rem;color:var(--teal);letter-spacing:2px;">> EDITAR NÚMEROS DE LA SECCIÓN "RESULTADOS REALES"</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:.75rem;color:var(--teal);letter-spacing:2px;">> EDITAR NÚMEROS DE LA SECCIÓN "RESULTADOS REALES"</span>
         </div>
         <div style="padding:2rem;">
           <div id="statsEditor" style="display:flex;flex-direction:column;gap:1.2rem;"></div>
@@ -799,7 +877,7 @@ body {
           </div>
           <!-- Live preview -->
           <div style="margin-top:2rem;border-top:1px solid var(--border);padding-top:1.5rem;">
-            <div style="font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--muted2);letter-spacing:2px;margin-bottom:1rem;">VISTA PREVIA</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--muted2);letter-spacing:2px;margin-bottom:1rem;">VISTA PREVIA</div>
             <div id="statsPreview" style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;"></div>
           </div>
         </div>
@@ -813,7 +891,7 @@ body {
       </div>
       <div class="card-box" style="max-width:680px;">
         <div style="padding:1.2rem 1.5rem;border-bottom:1px solid var(--border);">
-          <span style="font-family:'Share Tech Mono',monospace;font-size:.75rem;color:var(--teal);letter-spacing:2px;">> EDITAR DATOS DE CONTACTO PÚBLICOS</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:.75rem;color:var(--teal);letter-spacing:2px;">> EDITAR DATOS DE CONTACTO PÚBLICOS</span>
         </div>
         <div style="padding:2rem;">
           <div class="m-field">
@@ -844,7 +922,7 @@ body {
             <button class="btn-modal-save" onclick="saveContacto()"> > GUARDAR CAMBIOS</button>
           </div>
           <div id="contactoInfo" style="margin-top:1.5rem;padding:1rem;background:var(--surface);border-radius:4px;border:1px solid var(--border);display:none;">
-            <div style="font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--muted2);letter-spacing:1px;margin-bottom:.8rem;">DATOS ACTUALES GUARDADOS</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--muted2);letter-spacing:1px;margin-bottom:.8rem;">DATOS ACTUALES GUARDADOS</div>
             <div id="contactoDisplay" style="font-size:.95rem;line-height:2;color:var(--white);"></div>
           </div>
         </div>
@@ -858,7 +936,7 @@ body {
       </div>
       <div class="card-box" style="max-width:480px;">
         <div style="padding:1.2rem 1.5rem;border-bottom:1px solid var(--border);">
-          <span style="font-family:'Share Tech Mono',monospace;font-size:.75rem;color:var(--teal);letter-spacing:2px;">> SEGURIDAD DE ACCESO</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:.75rem;color:var(--teal);letter-spacing:2px;">> SEGURIDAD DE ACCESO</span>
         </div>
         <div style="padding:2rem;">
           <div class="m-field">
@@ -873,11 +951,11 @@ body {
             <label>CONFIRMAR NUEVA CONTRASEÑA</label>
             <input id="sec_confirm" type="password" placeholder="••••••••">
           </div>
-          <div id="sec_error" style="display:none;color:var(--red);font-family:'Share Tech Mono',monospace;font-size:.75rem;margin-bottom:1rem;"></div>
+          <div id="sec_error" style="display:none;color:var(--red);font-family:'IBM Plex Mono',monospace;font-size:.75rem;margin-bottom:1rem;"></div>
           <button class="btn-modal-save" onclick="changePassword()"> > CAMBIAR CONTRASEÑA</button>
           <div style="margin-top:1.5rem;padding:1rem;background:var(--surface);border-radius:4px;border:1px solid var(--border);">
-            <div style="font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--muted2);letter-spacing:1px;margin-bottom:.5rem;">USUARIO ACTUAL</div>
-            <div style="font-size:1rem;color:var(--teal);font-family:'Share Tech Mono',monospace;">admin</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--muted2);letter-spacing:1px;margin-bottom:.5rem;">USUARIO ACTUAL</div>
+            <div style="font-size:1rem;color:var(--teal);font-family:'IBM Plex Mono',monospace;">admin</div>
           </div>
         </div>
       </div>
@@ -1077,7 +1155,7 @@ body {
     <button class="modal-close" onclick="closeModal('clienteModal')">✕ ESC</button>
     <h3 id="clienteModalTitle">👥 NUEVO CLIENTE</h3>
 
-    <div style="font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--teal);letter-spacing:2px;margin-bottom:1.2rem;">DATOS PERSONALES</div>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--teal);letter-spacing:2px;margin-bottom:1.2rem;">DATOS PERSONALES</div>
     <div class="m-row">
       <div class="m-field"><label>NOMBRE COMPLETO *</label><input id="cl_name" placeholder="Nombre completo"></div>
       <div class="m-field"><label>EMAIL *</label><input id="cl_email" type="email" placeholder="email@ejemplo.com"></div>
@@ -1095,7 +1173,7 @@ body {
       </div>
     </div>
 
-    <div style="font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--gold);letter-spacing:2px;margin:1.2rem 0 .8rem;">DATOS DE LA EMPRESA</div>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--gold);letter-spacing:2px;margin:1.2rem 0 .8rem;">DATOS DE LA EMPRESA</div>
     <div class="m-row">
       <div class="m-field"><label>NOMBRE DE LA EMPRESA</label><input id="cl_empresa" placeholder="Nombre de la empresa"></div>
       <div class="m-field"><label>INDUSTRIA / SECTOR</label><input id="cl_industria" placeholder="Ej: Retail, Salud, Tecnología..."></div>
@@ -1105,7 +1183,7 @@ body {
       <div class="m-field"><label>DIRECCIÓN</label><input id="cl_direccion" placeholder="Ciudad, Estado"></div>
     </div>
 
-    <div style="font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--teal);letter-spacing:2px;margin:1.2rem 0 .8rem;">SERVICIO & NOTAS</div>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--teal);letter-spacing:2px;margin:1.2rem 0 .8rem;">SERVICIO & NOTAS</div>
     <div class="m-row">
       <div class="m-field">
         <label>SERVICIO CONTRATADO</label>
@@ -1142,11 +1220,11 @@ body {
 /* inject into existing styles inline */
 #view-invoices { }
 .inv-line-row { display:grid; grid-template-columns:1fr 70px 110px 36px; gap:.5rem; align-items:center; margin-bottom:.5rem; }
-.inv-line-row input { background:rgba(255,255,255,.04); border:1px solid var(--border2); border-radius:3px; padding:.45rem .7rem; color:var(--white); font-family:'Share Tech Mono',monospace; font-size:.82rem; outline:none; width:100%; }
+.inv-line-row input { background:rgba(255,255,255,.04); border:1px solid var(--border2); border-radius:3px; padding:.45rem .7rem; color:var(--white); font-family:'IBM Plex Mono',monospace; font-size:.82rem; outline:none; width:100%; }
 .inv-line-row input:focus { border-color:var(--teal); }
-.si { width:100%; background:rgba(255,255,255,.03); border:1px solid var(--border2); border-radius:3px; padding:.75rem 1rem; color:var(--white); font-family:'Rajdhani',sans-serif; font-size:1rem; outline:none; transition:border-color .3s; margin-bottom:1.2rem; }
+.si { width:100%; background:rgba(255,255,255,.03); border:1px solid var(--border2); border-radius:8px; padding:.75rem 1rem; color:var(--white); font-family:'Inter',sans-serif; font-size:1rem; outline:none; transition:border-color .3s; margin-bottom:1.2rem; }
 .si:focus { border-color:var(--teal); }
-.sl { font-family:'Share Tech Mono',monospace; font-size:.7rem; color:var(--muted2); letter-spacing:1px; display:block; margin-bottom:.4rem; }
+.sl { font-family:'IBM Plex Mono',monospace; font-size:.7rem; color:var(--muted2); letter-spacing:1px; display:block; margin-bottom:.4rem; }
 </style>
 
 <!-- FACTURAS sidebar item is already in HTML but view is missing — add it here -->
@@ -1174,13 +1252,13 @@ body {
       <div class="m-field"><label>FECHA DE VENCIMIENTO</label><input id="inv_due" type="date"></div>
     </div>
     <div class="m-field"><label>DESCRIPCIÓN / PROYECTO</label><input id="inv_desc" placeholder="Ej: Desarrollo de sistema CRM..."></div>
-    <div style="font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--teal);letter-spacing:2px;margin:.8rem 0;">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--teal);letter-spacing:2px;margin:.8rem 0;">
       LÍNEAS DE FACTURA
     </div>
     <div style="display:grid;grid-template-columns:1fr 70px 110px 36px;gap:.5rem;margin-bottom:.4rem;">
-      <span style="font-family:'Share Tech Mono',monospace;font-size:.63rem;color:var(--muted2);letter-spacing:1px;">DESCRIPCIÓN</span>
-      <span style="font-family:'Share Tech Mono',monospace;font-size:.63rem;color:var(--muted2);letter-spacing:1px;">CANT.</span>
-      <span style="font-family:'Share Tech Mono',monospace;font-size:.63rem;color:var(--muted2);letter-spacing:1px;">PRECIO UNIT.</span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:.63rem;color:var(--muted2);letter-spacing:1px;">DESCRIPCIÓN</span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:.63rem;color:var(--muted2);letter-spacing:1px;">CANT.</span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:.63rem;color:var(--muted2);letter-spacing:1px;">PRECIO UNIT.</span>
       <span></span>
     </div>
     <div id="invLines"></div>
@@ -1190,16 +1268,16 @@ body {
       <div style="background:var(--surface);border:1px solid var(--border2);border-radius:4px;padding:1rem 1.5rem;min-width:220px;">
         <div style="display:flex;justify-content:space-between;margin-bottom:.4rem;">
           <span class="sl" style="margin:0;">SUBTOTAL</span>
-          <span style="font-family:'Share Tech Mono',monospace;font-size:.85rem;" id="invSubtotal">$0.00</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:.85rem;" id="invSubtotal">$0.00</span>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem;">
           <span class="sl" style="margin:0;">IMPUESTO %</span>
           <input type="number" id="inv_tax" value="0" min="0" max="100" oninput="calcInvTotal()"
-            style="width:60px;background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:3px;padding:.3rem .5rem;color:var(--white);font-family:'Share Tech Mono',monospace;font-size:.8rem;outline:none;text-align:right;">
+            style="width:60px;background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:3px;padding:.3rem .5rem;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:.8rem;outline:none;text-align:right;">
         </div>
         <div style="display:flex;justify-content:space-between;border-top:1px solid var(--border2);padding-top:.5rem;margin-top:.3rem;">
-          <span style="font-family:'Share Tech Mono',monospace;font-size:.75rem;color:var(--teal);letter-spacing:1px;">TOTAL</span>
-          <span style="font-family:'Orbitron',monospace;font-size:1.2rem;font-weight:900;color:var(--teal);" id="invTotal">$0.00</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:.75rem;color:var(--teal);letter-spacing:1px;">TOTAL</span>
+          <span style="font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:900;color:var(--teal);" id="invTotal">$0.00</span>
         </div>
       </div>
     </div>
@@ -1306,17 +1384,17 @@ function updateBadges() {
 // NAVIGATION
 // ═══════════════════════════════════════════════
 const VIEW_META = {
-  dashboard:     ['DASHBOARD',                'Resumen general del sistema'],
-  appointments:  ['CITAS AGENDADAS',          'Gestión de todas las citas'],
-  messages:      ['MENSAJES RECIBIDOS',       'Bandeja de entrada'],
-  clientes:      ['GESTIÓN DE CLIENTES',      'Base de datos de clientes'],
-  invoices:      ['FACTURAS',                 'Creación y gestión de facturas'],
-  clients:       ['CLIENTES SATISFECHOS',     'Testimonios del sitio web'],
-  gallery:       ['GALERÍA DE PROYECTOS',     'Portfolio de proyectos'],
-  notifications: ['NOTIFICACIONES',           'Alertas de nuevas citas'],
-  stats:         ['RESULTADOS / STATS',       'Editar números del sitio web'],
-  contacto:      ['INFORMACIÓN DE CONTACTO',  'Datos de contacto públicos'],
-  seguridad:     ['CAMBIAR CONTRASEÑA',       'Seguridad de acceso al panel'],
+  dashboard:     ['Dashboard',                'Resumen general del sistema'],
+  appointments:  ['Citas Agendadas',          'Gestión de todas las citas'],
+  messages:      ['Mensajes Recibidos',       'Bandeja de entrada'],
+  clientes:      ['Gestión de Clientes',      'Base de datos de clientes'],
+  invoices:      ['Facturas',                 'Creación y gestión de facturas'],
+  clients:       ['Clientes Satisfechos',     'Testimonios del sitio web'],
+  gallery:       ['Galería de Proyectos',     'Portfolio de proyectos'],
+  notifications: ['Notificaciones',           'Alertas de nuevas citas'],
+  stats:         ['Resultados / Stats',       'Editar números del sitio web'],
+  contacto:      ['Información de Contacto',  'Datos de contacto públicos'],
+  seguridad:     ['Cambiar Contraseña',       'Seguridad de acceso al panel'],
 };
 
 function showView(id, el) {
@@ -1343,13 +1421,13 @@ function renderDashboard() {
   document.getElementById('dashAppts').innerHTML = r5a.length
     ? r5a.map(a => `<div style="padding:.8rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
         <div><div style="font-size:.95rem;font-weight:600;">${a.name}</div>
-        <div style="font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--muted2);">${a.type} · ${a.date}</div></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--muted2);">${a.type} · ${a.date}</div></div>
         ${statusBadge(a.status)}</div>`).join('')
     : '<div class="empty-state" style="padding:2rem;"><div class="empty-icon">📅</div>Sin citas</div>';
   document.getElementById('dashMsgs').innerHTML = r5m.length
     ? r5m.map(m => `<div style="padding:.8rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
         <div><div style="font-size:.95rem;font-weight:600;">${m.name}</div>
-        <div style="font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--muted2);">${m.subject||'Sin asunto'} · ${m.date}</div></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--muted2);">${m.subject||'Sin asunto'} · ${m.date}</div></div>
         ${msgStatusBadge(m.status)}</div>`).join('')
     : '<div class="empty-state" style="padding:2rem;"><div class="empty-icon">✉️</div>Sin mensajes</div>';
 }
@@ -1392,9 +1470,9 @@ function renderAppts(search='', filterType='') {
   empty.style.display = 'none';
   tbody.innerHTML = data.map(a => `<tr>
     <td><div style="font-weight:600;">${a.name}</div>
-    <div style="font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--muted2);">${a.email}</div></td>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--muted2);">${a.email}</div></td>
     <td>${typeBadge(a.type)}</td>
-    <td style="font-family:'Share Tech Mono',monospace;font-size:.8rem;">${a.date}</td>
+    <td style="font-family:'IBM Plex Mono',monospace;font-size:.8rem;">${a.date}</td>
     <td>${a.mode==='Llamada Telefónica'?'📞':'🤝'} ${a.mode}</td>
     <td><select class="status-select" onchange="changeApptStatus(${a.id},this.value)">
       ${['Pendiente','Confirmada','Completada','Cancelada'].map(s=>`<option ${s===a.status?'selected':''}>${s}</option>`).join('')}
@@ -1501,9 +1579,9 @@ function renderMsgs(search='') {
   empty.style.display = 'none';
   tbody.innerHTML = data.map(m => `<tr>
     <td style="font-weight:600;">${m.name}</td>
-    <td style="font-family:'Share Tech Mono',monospace;font-size:.78rem;color:var(--muted2);">${m.email}</td>
+    <td style="font-family:'IBM Plex Mono',monospace;font-size:.78rem;color:var(--muted2);">${m.email}</td>
     <td>${m.subject||'Sin asunto'}</td>
-    <td style="font-family:'Share Tech Mono',monospace;font-size:.78rem;">${m.date}</td>
+    <td style="font-family:'IBM Plex Mono',monospace;font-size:.78rem;">${m.date}</td>
     <td><select class="status-select" onchange="changeMsgStatus(${m.id},this.value)">
       ${['No leído','Leído','Respondido','Archivado'].map(s=>`<option ${s===m.status?'selected':''}>${s}</option>`).join('')}
     </select></td>
@@ -1584,13 +1662,13 @@ function renderClientes(search='', filterTipo='') {
   empty.style.display = 'none';
   tbody.innerHTML = data.map(c => `<tr>
     <td><div style="font-weight:600;">${c.name}</div>
-    <div style="font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--muted2);">${c.email}</div></td>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--muted2);">${c.email}</div></td>
     <td><div>${c.empresa||'—'}</div>
-    <div style="font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--muted2);">${c.industria||''}</div></td>
-    <td style="font-family:'Share Tech Mono',monospace;font-size:.78rem;">${c.phone||'—'}</td>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--muted2);">${c.industria||''}</div></td>
+    <td style="font-family:'IBM Plex Mono',monospace;font-size:.78rem;">${c.phone||'—'}</td>
     <td><span class="badge badge-teal">${c.servicio}</span></td>
     <td>${tipoBadge(c.tipo)}</td>
-    <td style="font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--muted2);">
+    <td style="font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--muted2);">
       ${c.citaId ? `<span style="color:var(--teal);">Cita #${String(c.citaId).slice(-4)}</span>` : '—'}
     </td>
     <td><div style="display:flex;gap:.4rem;">
@@ -1686,21 +1764,21 @@ function verCliente(id) {
   const cita = c.citaId ? appts.find(a => a.id==c.citaId) : null;
   document.getElementById('detailContent').innerHTML = `<h3>👥 DETALLE DE CLIENTE</h3>
     <div style="display:flex;gap:.6rem;margin-bottom:1.2rem;">${tipoBadge(c.tipo)}<span class="badge badge-teal">${c.servicio}</span></div>
-    <div style="font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--teal);letter-spacing:2px;margin-bottom:.6rem;">DATOS PERSONALES</div>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--teal);letter-spacing:2px;margin-bottom:.6rem;">DATOS PERSONALES</div>
     <div class="detail-grid" style="margin-bottom:1rem;">
       <div class="detail-item"><label>NOMBRE</label><span>${c.name}</span></div>
       <div class="detail-item"><label>EMAIL</label><span>${c.email}</span></div>
       <div class="detail-item"><label>TELÉFONO</label><span>${c.phone||'—'}</span></div>
       <div class="detail-item"><label>REGISTRADO</label><span>${c.createdAt||'—'}</span></div>
     </div>
-    <div style="font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--gold);letter-spacing:2px;margin-bottom:.6rem;">EMPRESA</div>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--gold);letter-spacing:2px;margin-bottom:.6rem;">EMPRESA</div>
     <div class="detail-grid" style="margin-bottom:1rem;">
       <div class="detail-item"><label>EMPRESA</label><span>${c.empresa||'—'}</span></div>
       <div class="detail-item"><label>INDUSTRIA</label><span>${c.industria||'—'}</span></div>
       <div class="detail-item"><label>SITIO WEB</label><span>${c.web||'—'}</span></div>
       <div class="detail-item"><label>DIRECCIÓN</label><span>${c.direccion||'—'}</span></div>
     </div>
-    ${cita ? `<div style="font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--teal);letter-spacing:2px;margin-bottom:.6rem;">CITA DE ORIGEN</div>
+    ${cita ? `<div style="font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--teal);letter-spacing:2px;margin-bottom:.6rem;">CITA DE ORIGEN</div>
     <div class="detail-grid" style="margin-bottom:1rem;">
       <div class="detail-item"><label>TIPO</label><span>${cita.type}</span></div>
       <div class="detail-item"><label>FECHA</label><span>${cita.date}</span></div>
@@ -1729,11 +1807,11 @@ function renderInvoices(search='', filterStatus='') {
   if (!data.length) { tbody.innerHTML=''; empty.style.display='block'; return; }
   empty.style.display = 'none';
   tbody.innerHTML = data.map(inv => `<tr>
-    <td style="font-family:'Share Tech Mono',monospace;font-size:.82rem;color:var(--teal);">${inv.num||'—'}</td>
+    <td style="font-family:'IBM Plex Mono',monospace;font-size:.82rem;color:var(--teal);">${inv.num||'—'}</td>
     <td><div style="font-weight:600;">${inv.clientName||'—'}</div></td>
-    <td style="font-family:'Share Tech Mono',monospace;font-size:.78rem;">${inv.date}</td>
-    <td style="font-family:'Share Tech Mono',monospace;font-size:.78rem;">${inv.due||'—'}</td>
-    <td style="font-family:'Orbitron',monospace;font-size:.95rem;color:var(--teal);">$${Number(inv.total||0).toFixed(2)}</td>
+    <td style="font-family:'IBM Plex Mono',monospace;font-size:.78rem;">${inv.date}</td>
+    <td style="font-family:'IBM Plex Mono',monospace;font-size:.78rem;">${inv.due||'—'}</td>
+    <td style="font-family:'Syne',sans-serif;font-size:.95rem;color:var(--teal);">$${Number(inv.total||0).toFixed(2)}</td>
     <td>${invStatusBadge(inv.status)}</td>
     <td><div style="display:flex;gap:.4rem;">
       <button class="btn-sm btn-teal" onclick="verInvoice(${inv.id})">Ver</button>
@@ -1862,9 +1940,9 @@ function verInvoice(id) {
   const inv = invoices.find(x => x.id===id); if (!inv) return;
   const linesHTML = (inv.lines||[]).map(l => `<tr>
     <td style="padding:.6rem 1rem;border-bottom:1px solid var(--border);">${l.desc||'—'}</td>
-    <td style="padding:.6rem 1rem;border-bottom:1px solid var(--border);text-align:center;font-family:'Share Tech Mono',monospace;font-size:.82rem;">${l.qty}</td>
-    <td style="padding:.6rem 1rem;border-bottom:1px solid var(--border);text-align:right;font-family:'Share Tech Mono',monospace;font-size:.82rem;">$${Number(l.price).toFixed(2)}</td>
-    <td style="padding:.6rem 1rem;border-bottom:1px solid var(--border);text-align:right;font-family:'Orbitron',monospace;font-size:.85rem;color:var(--teal);">$${(l.qty*l.price).toFixed(2)}</td>
+    <td style="padding:.6rem 1rem;border-bottom:1px solid var(--border);text-align:center;font-family:'IBM Plex Mono',monospace;font-size:.82rem;">${l.qty}</td>
+    <td style="padding:.6rem 1rem;border-bottom:1px solid var(--border);text-align:right;font-family:'IBM Plex Mono',monospace;font-size:.82rem;">$${Number(l.price).toFixed(2)}</td>
+    <td style="padding:.6rem 1rem;border-bottom:1px solid var(--border);text-align:right;font-family:'Syne',sans-serif;font-size:.85rem;color:var(--teal);">$${(l.qty*l.price).toFixed(2)}</td>
   </tr>`).join('');
   document.getElementById('detailContent').innerHTML = `<h3>🧾 ${inv.num||'FACTURA'}</h3>
     <div style="display:flex;gap:.6rem;margin-bottom:1.2rem;">${invStatusBadge(inv.status)}</div>
@@ -1876,17 +1954,17 @@ function verInvoice(id) {
     </div>
     <table style="width:100%;border-collapse:collapse;margin-bottom:1rem;">
       <thead><tr>
-        <th style="padding:.6rem 1rem;background:var(--surface);font-family:'Share Tech Mono',monospace;font-size:.63rem;color:var(--muted2);letter-spacing:2px;text-align:left;border-bottom:1px solid var(--border);">DESCRIPCIÓN</th>
-        <th style="padding:.6rem 1rem;background:var(--surface);font-family:'Share Tech Mono',monospace;font-size:.63rem;color:var(--muted2);letter-spacing:2px;text-align:center;border-bottom:1px solid var(--border);">CANT.</th>
-        <th style="padding:.6rem 1rem;background:var(--surface);font-family:'Share Tech Mono',monospace;font-size:.63rem;color:var(--muted2);letter-spacing:2px;text-align:right;border-bottom:1px solid var(--border);">PRECIO</th>
-        <th style="padding:.6rem 1rem;background:var(--surface);font-family:'Share Tech Mono',monospace;font-size:.63rem;color:var(--muted2);letter-spacing:2px;text-align:right;border-bottom:1px solid var(--border);">TOTAL</th>
+        <th style="padding:.6rem 1rem;background:var(--surface);font-family:'IBM Plex Mono',monospace;font-size:.63rem;color:var(--muted2);letter-spacing:2px;text-align:left;border-bottom:1px solid var(--border);">DESCRIPCIÓN</th>
+        <th style="padding:.6rem 1rem;background:var(--surface);font-family:'IBM Plex Mono',monospace;font-size:.63rem;color:var(--muted2);letter-spacing:2px;text-align:center;border-bottom:1px solid var(--border);">CANT.</th>
+        <th style="padding:.6rem 1rem;background:var(--surface);font-family:'IBM Plex Mono',monospace;font-size:.63rem;color:var(--muted2);letter-spacing:2px;text-align:right;border-bottom:1px solid var(--border);">PRECIO</th>
+        <th style="padding:.6rem 1rem;background:var(--surface);font-family:'IBM Plex Mono',monospace;font-size:.63rem;color:var(--muted2);letter-spacing:2px;text-align:right;border-bottom:1px solid var(--border);">TOTAL</th>
       </tr></thead>
       <tbody>${linesHTML}</tbody>
     </table>
     <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.3rem;margin-bottom:1rem;">
-      <div style="font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--muted2);">Subtotal: $${Number(inv.subtotal||0).toFixed(2)}</div>
-      <div style="font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--muted2);">Impuesto: ${inv.tax||0}%</div>
-      <div style="font-family:'Orbitron',monospace;font-size:1.6rem;font-weight:900;color:var(--teal);">TOTAL: $${Number(inv.total||0).toFixed(2)}</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:.8rem;color:var(--muted2);">Subtotal: $${Number(inv.subtotal||0).toFixed(2)}</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:.8rem;color:var(--muted2);">Impuesto: ${inv.tax||0}%</div>
+      <div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:900;color:var(--teal);">TOTAL: $${Number(inv.total||0).toFixed(2)}</div>
     </div>
     ${inv.notes?`<div class="detail-item" style="margin-bottom:1rem;"><label>NOTAS / TÉRMINOS</label><span style="white-space:pre-wrap;">${inv.notes}</span></div>`:''}
     <div style="display:flex;justify-content:flex-end;gap:.8rem;margin-top:1.5rem;">
@@ -2006,7 +2084,7 @@ function renderGallery(search='', cat='') {
         <span class="badge badge-teal" style="margin-left:.3rem;">${p.category}</span>
       </div>
       ${p.desc?`<div class="client-review">${p.desc}</div>`:''}
-      ${p.tech?`<div style="font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--muted2);letter-spacing:1px;margin-bottom:.8rem;">${p.tech}</div>`:''}
+      ${p.tech?`<div style="font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--muted2);letter-spacing:1px;margin-bottom:.8rem;">${p.tech}</div>`:''}
       <div class="client-actions">
         <button class="btn-sm btn-gold" onclick="editGalleryProject(${p.id})">Editar</button>
         <button class="btn-sm btn-red"  onclick="deleteGalleryProject(${p.id})">✕</button>
@@ -2155,27 +2233,27 @@ function renderStatsEditor() {
   editor.innerHTML = currentStats.map((s,i) => `
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:1.5rem;position:relative;">
       <div style="position:absolute;top:0;left:0;bottom:0;width:3px;border-radius:6px 0 0 6px;background:${s.color==='gold'?'var(--gold)':'var(--teal)'};"></div>
-      <div style="font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--muted2);letter-spacing:2px;margin-bottom:.8rem;margin-left:.6rem;">STAT ${i+1}</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--muted2);letter-spacing:2px;margin-bottom:.8rem;margin-left:.6rem;">STAT ${i+1}</div>
       <div style="display:grid;grid-template-columns:1fr 100px 150px 110px;gap:.8rem;align-items:end;margin-left:.6rem;">
         <div>
-          <label style="font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--muted2);letter-spacing:1px;display:block;margin-bottom:.3rem;">ETIQUETA</label>
+          <label style="font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--muted2);letter-spacing:1px;display:block;margin-bottom:.3rem;">ETIQUETA</label>
           <input value="${s.label}" oninput="currentStats[${i}].label=this.value;renderStatsPreview()"
-            style="width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:3px;padding:.55rem .8rem;color:var(--white);font-family:'Rajdhani',sans-serif;font-size:.95rem;outline:none;">
+            style="width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:3px;padding:.55rem .8rem;color:var(--white);font-family:'Inter',sans-serif;font-size:.95rem;outline:none;">
         </div>
         <div>
-          <label style="font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--muted2);letter-spacing:1px;display:block;margin-bottom:.3rem;">NÚMERO</label>
+          <label style="font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--muted2);letter-spacing:1px;display:block;margin-bottom:.3rem;">NÚMERO</label>
           <input type="number" value="${s.target}" oninput="currentStats[${i}].target=+this.value;renderStatsPreview()"
-            style="width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:3px;padding:.55rem .8rem;color:var(--white);font-family:'Share Tech Mono',monospace;font-size:.9rem;outline:none;">
+            style="width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:3px;padding:.55rem .8rem;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:.9rem;outline:none;">
         </div>
         <div>
-          <label style="font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--muted2);letter-spacing:1px;display:block;margin-bottom:.3rem;">SUFIJO (ej: +, %, años)</label>
+          <label style="font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--muted2);letter-spacing:1px;display:block;margin-bottom:.3rem;">SUFIJO (ej: +, %, años)</label>
           <input value="${s.suffix}" oninput="currentStats[${i}].suffix=this.value;renderStatsPreview()"
-            style="width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:3px;padding:.55rem .8rem;color:var(--white);font-family:'Share Tech Mono',monospace;font-size:.9rem;outline:none;">
+            style="width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:3px;padding:.55rem .8rem;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:.9rem;outline:none;">
         </div>
         <div>
-          <label style="font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--muted2);letter-spacing:1px;display:block;margin-bottom:.3rem;">COLOR</label>
+          <label style="font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--muted2);letter-spacing:1px;display:block;margin-bottom:.3rem;">COLOR</label>
           <select onchange="currentStats[${i}].color=this.value;renderStatsEditor()"
-            style="width:100%;background:var(--card);border:1px solid var(--border2);color:var(--white);font-family:'Share Tech Mono',monospace;font-size:.75rem;padding:.55rem .8rem;border-radius:3px;outline:none;cursor:pointer;">
+            style="width:100%;background:var(--card);border:1px solid var(--border2);color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:.75rem;padding:.55rem .8rem;border-radius:3px;outline:none;cursor:pointer;">
             <option value="teal" ${s.color==='teal'?'selected':''}>🔵 Teal</option>
             <option value="gold" ${s.color==='gold'?'selected':''}>🟡 Gold</option>
           </select>
@@ -2191,8 +2269,8 @@ function renderStatsPreview() {
     const c = s.color==='gold' ? 'var(--gold)' : 'var(--teal)';
     return `<div style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:1.5rem 1rem;text-align:center;position:relative;overflow:hidden;">
       <div style="position:absolute;top:0;left:0;right:0;height:2px;background:${c};"></div>
-      <div style="font-family:'Orbitron',monospace;font-size:2rem;font-weight:900;color:${c};line-height:1;">${s.target}${s.suffix}</div>
-      <div style="font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(232,234,240,.5);letter-spacing:2px;margin-top:.5rem;">${s.label}</div>
+      <div style="font-family:'Syne',sans-serif;font-size:2rem;font-weight:900;color:${c};line-height:1;">${s.target}${s.suffix}</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:.65rem;color:rgba(232,234,240,.5);letter-spacing:2px;margin-top:.5rem;">${s.label}</div>
     </div>`;}).join('');
 }
 
