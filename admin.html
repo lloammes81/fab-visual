@@ -513,6 +513,10 @@ body {
         <span class="sb-badge gold" id="msgBadge">0</span>
       </div>
       <div class="sb-section-title">CONTENIDO</div>
+      <div class="sb-item" onclick="showView('clientes',this)">
+        <span class="sb-icon">👥</span><span>Clientes</span>
+        <span class="sb-badge" id="clientesBadge" style="background:var(--blue);">0</span>
+      </div>
       <div class="sb-item" onclick="showView('clients',this)">
         <span class="sb-icon">⭐</span><span>Clientes Satisfechos</span>
       </div>
@@ -523,6 +527,13 @@ body {
       <div class="sb-item" onclick="showView('notifications',this)">
         <span class="sb-icon">🔔</span><span>Notificaciones</span>
         <span class="sb-badge" id="notifBadge" style="background:var(--red);">0</span>
+      </div>
+      <div class="sb-section-title">CONFIGURACIÓN</div>
+      <div class="sb-item" onclick="showView('contacto',this)">
+        <span class="sb-icon">📞</span><span>Información de Contacto</span>
+      </div>
+      <div class="sb-item" onclick="showView('seguridad',this)">
+        <span class="sb-icon">🔐</span><span>Cambiar Contraseña</span>
       </div>
     </nav>
     <div class="sb-footer">
@@ -701,6 +712,115 @@ body {
       <div id="galleryEmpty" class="empty-state" style="display:none;">
         <div class="empty-icon">🖼️</div>
         <div>No hay proyectos en la galería aún</div>
+      </div>
+    </div>
+
+    <!-- ── CLIENTES ── -->
+    <div class="view" id="view-clientes">
+      <div class="section-hdr">
+        <h2>GESTIÓN DE <span>CLIENTES</span></h2>
+        <div class="action-bar">
+          <input class="search-box" placeholder="Buscar cliente..." oninput="renderClientes(this.value)">
+          <select class="filter-select" onchange="renderClientes('',this.value)">
+            <option value="">Todos los tipos</option>
+            <option>Nuevo</option>
+            <option>Activo</option>
+            <option>VIP</option>
+            <option>Inactivo</option>
+          </select>
+          <button class="btn-sm btn-teal" onclick="openClienteModal()">+ Agregar Cliente</button>
+        </div>
+      </div>
+      <div class="card-box">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>CLIENTE</th><th>EMPRESA</th><th>CONTACTO</th><th>SERVICIO</th><th>TIPO</th><th>CITA ORIGEN</th><th>ACCIONES</th>
+            </tr>
+          </thead>
+          <tbody id="clientesBody"></tbody>
+        </table>
+        <div id="clientesEmpty" class="empty-state" style="display:none;">
+          <div class="empty-icon">👥</div>
+          <div>No hay clientes registrados aún.<br><span style="font-size:.75rem;color:var(--muted);">Los clientes se crean desde sus citas o manualmente.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CONTACTO ── -->
+    <div class="view" id="view-contacto">
+      <div class="section-hdr">
+        <h2>INFORMACIÓN DE <span>CONTACTO</span></h2>
+      </div>
+      <div class="card-box" style="max-width:680px;">
+        <div style="padding:1.2rem 1.5rem;border-bottom:1px solid var(--border);">
+          <span style="font-family:'Share Tech Mono',monospace;font-size:.75rem;color:var(--teal);letter-spacing:2px;">> EDITAR DATOS DE CONTACTO PÚBLICOS</span>
+        </div>
+        <div style="padding:2rem;">
+          <div class="m-field">
+            <label>EMAIL DE CONTACTO</label>
+            <input id="ct_email" type="email" placeholder="tu@email.com">
+          </div>
+          <div class="m-field">
+            <label>TELÉFONO</label>
+            <input id="ct_phone" type="tel" placeholder="(561) 000-0000">
+          </div>
+          <div class="m-field">
+            <label>SITIO WEB</label>
+            <input id="ct_web" type="url" placeholder="https://www.fab-visual.com">
+          </div>
+          <div class="m-field">
+            <label>DIRECCIÓN / CIUDAD</label>
+            <input id="ct_address" placeholder="Ciudad, Estado, País">
+          </div>
+          <div class="m-field">
+            <label>WHATSAPP (número con código de país)</label>
+            <input id="ct_whatsapp" placeholder="+15610000000">
+          </div>
+          <div class="m-field">
+            <label>LINKEDIN</label>
+            <input id="ct_linkedin" placeholder="https://linkedin.com/in/tu-perfil">
+          </div>
+          <div style="display:flex;gap:.8rem;margin-top:.5rem;">
+            <button class="btn-modal-save" onclick="saveContacto()"> > GUARDAR CAMBIOS</button>
+          </div>
+          <div id="contactoInfo" style="margin-top:1.5rem;padding:1rem;background:var(--surface);border-radius:4px;border:1px solid var(--border);display:none;">
+            <div style="font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--muted2);letter-spacing:1px;margin-bottom:.8rem;">DATOS ACTUALES GUARDADOS</div>
+            <div id="contactoDisplay" style="font-size:.95rem;line-height:2;color:var(--white);"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SEGURIDAD ── -->
+    <div class="view" id="view-seguridad">
+      <div class="section-hdr">
+        <h2>CAMBIAR <span>CONTRASEÑA</span></h2>
+      </div>
+      <div class="card-box" style="max-width:480px;">
+        <div style="padding:1.2rem 1.5rem;border-bottom:1px solid var(--border);">
+          <span style="font-family:'Share Tech Mono',monospace;font-size:.75rem;color:var(--teal);letter-spacing:2px;">> SEGURIDAD DE ACCESO</span>
+        </div>
+        <div style="padding:2rem;">
+          <div class="m-field">
+            <label>CONTRASEÑA ACTUAL</label>
+            <input id="sec_current" type="password" placeholder="••••••••">
+          </div>
+          <div class="m-field">
+            <label>NUEVA CONTRASEÑA</label>
+            <input id="sec_new" type="password" placeholder="••••••••">
+          </div>
+          <div class="m-field">
+            <label>CONFIRMAR NUEVA CONTRASEÑA</label>
+            <input id="sec_confirm" type="password" placeholder="••••••••">
+          </div>
+          <div id="sec_error" style="display:none;color:var(--red);font-family:'Share Tech Mono',monospace;font-size:.75rem;margin-bottom:1rem;"></div>
+          <button class="btn-modal-save" onclick="changePassword()"> > CAMBIAR CONTRASEÑA</button>
+          <div style="margin-top:1.5rem;padding:1rem;background:var(--surface);border-radius:4px;border:1px solid var(--border);">
+            <div style="font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--muted2);letter-spacing:1px;margin-bottom:.5rem;">USUARIO ACTUAL</div>
+            <div style="font-size:1rem;color:var(--teal);font-family:'Share Tech Mono',monospace;">admin</div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -892,6 +1012,68 @@ body {
   </div>
 </div>
 
+<!-- ═══ MODAL: CLIENTE COMPLETO ═══ -->
+<div class="modal-overlay" id="clienteModal">
+  <div class="modal" style="width:640px;">
+    <button class="modal-close" onclick="closeModal('clienteModal')">✕ ESC</button>
+    <h3 id="clienteModalTitle">👥 NUEVO CLIENTE</h3>
+
+    <div style="font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--teal);letter-spacing:2px;margin-bottom:1.2rem;">DATOS PERSONALES</div>
+    <div class="m-row">
+      <div class="m-field"><label>NOMBRE COMPLETO *</label><input id="cl_name" placeholder="Nombre completo"></div>
+      <div class="m-field"><label>EMAIL *</label><input id="cl_email" type="email" placeholder="email@ejemplo.com"></div>
+    </div>
+    <div class="m-row">
+      <div class="m-field"><label>TELÉFONO</label><input id="cl_phone" placeholder="(561) 000-0000"></div>
+      <div class="m-field">
+        <label>TIPO DE CLIENTE</label>
+        <select id="cl_tipo">
+          <option>Nuevo</option>
+          <option>Activo</option>
+          <option>VIP</option>
+          <option>Inactivo</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--gold);letter-spacing:2px;margin:1.2rem 0 .8rem;">DATOS DE LA EMPRESA</div>
+    <div class="m-row">
+      <div class="m-field"><label>NOMBRE DE LA EMPRESA</label><input id="cl_empresa" placeholder="Nombre de la empresa"></div>
+      <div class="m-field"><label>INDUSTRIA / SECTOR</label><input id="cl_industria" placeholder="Ej: Retail, Salud, Tecnología..."></div>
+    </div>
+    <div class="m-row">
+      <div class="m-field"><label>SITIO WEB</label><input id="cl_web" placeholder="https://..."></div>
+      <div class="m-field"><label>DIRECCIÓN</label><input id="cl_direccion" placeholder="Ciudad, Estado"></div>
+    </div>
+
+    <div style="font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--teal);letter-spacing:2px;margin:1.2rem 0 .8rem;">SERVICIO & NOTAS</div>
+    <div class="m-row">
+      <div class="m-field">
+        <label>SERVICIO CONTRATADO</label>
+        <select id="cl_servicio">
+          <option>Business Software</option>
+          <option>Automation Systems</option>
+          <option>IT Support</option>
+          <option>App Móvil / Web</option>
+          <option>Consultoría</option>
+          <option>Otro</option>
+        </select>
+      </div>
+      <div class="m-field">
+        <label>CITA DE ORIGEN</label>
+        <select id="cl_citaId">
+          <option value="">Sin cita asociada</option>
+        </select>
+      </div>
+    </div>
+    <div class="m-field"><label>NOTAS INTERNAS</label><textarea id="cl_notas" placeholder="Notas privadas sobre este cliente..."></textarea></div>
+    <div class="modal-actions">
+      <button class="btn-sm btn-red" onclick="closeModal('clienteModal')">Cancelar</button>
+      <button class="btn-modal-save" onclick="saveCliente()"> > GUARDAR CLIENTE</button>
+    </div>
+  </div>
+</div>
+
 <!-- TOAST -->
 <div id="toast"></div>
 
@@ -912,7 +1094,7 @@ async function storeSet(key, val) {
 // ═══════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════
-let appts = [], msgs = [], clients = [];
+let appts = [], msgs = [], clients = [], clientes = [];
 let editApptId = null, editMsgId = null, editClientId = null;
 let currentImg = '';
 
@@ -943,11 +1125,12 @@ document.getElementById('lPass').addEventListener('keydown', e => { if(e.key==='
 // INIT
 // ═══════════════════════════════════════════════
 async function initAdmin() {
-  appts   = (await storeGet('fv_appts'))   || [];
-  msgs    = (await storeGet('fv_msgs'))    || [];
-  clients = (await storeGet('fv_clients')) || [];
-  notifs  = (await storeGet('fv_notifs'))  || [];
-  gallery = (await storeGet('fv_gallery')) || [];
+  appts   = (await storeGet('fv_appts'))    || [];
+  msgs    = (await storeGet('fv_msgs'))     || [];
+  clients = (await storeGet('fv_clients'))  || [];
+  notifs  = (await storeGet('fv_notifs'))   || [];
+  gallery = (await storeGet('fv_gallery'))  || [];
+  clientes= (await storeGet('fv_clientes')) || [];
   refreshAll();
 }
 
@@ -959,6 +1142,7 @@ function refreshAll() {
   renderClients();
   renderNotifs();
   renderGallery();
+  renderClientes();
 }
 
 function updateBadges() {
@@ -967,6 +1151,7 @@ function updateBadges() {
   document.getElementById('msgBadge').textContent   = msgs.filter(m=>m.status==='No leído').length;
   const unreadNotifs = notifs.filter(n=>!n.read).length;
   document.getElementById('notifBadge').textContent = unreadNotifs;
+  document.getElementById('clientesBadge').textContent = clientes.length;
   document.getElementById('ds-appts').textContent   = appts.length;
   document.getElementById('ds-pending').textContent = pendingAppts;
   document.getElementById('ds-clients').textContent = clients.length;
@@ -982,7 +1167,10 @@ const viewMeta = {
   messages:      ['MENSAJES RECIBIDOS', 'Bandeja de entrada'],
   clients:       ['CLIENTES SATISFECHOS', 'Testimonios y proyectos destacados'],
   gallery:       ['GALERÍA DE PROYECTOS', 'Portfolio y proyectos realizados'],
+  clientes:      ['GESTIÓN DE CLIENTES', 'Base de datos de clientes y empresas'],
   notifications: ['NOTIFICACIONES', 'Alertas de nuevas citas'],
+  contacto:      ['INFORMACIÓN DE CONTACTO', 'Datos de contacto públicos del sitio web'],
+  seguridad:     ['CAMBIAR CONTRASEÑA', 'Seguridad y acceso al panel admin'],
 };
 function showView(id, el) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
@@ -1061,6 +1249,7 @@ function renderAppts(search='', filterType='') {
         <div style="display:flex;gap:.4rem;">
           <button class="btn-sm btn-teal" onclick="viewAppt(${a.id})">Ver</button>
           <button class="btn-sm btn-gold" onclick="editAppt(${a.id})">Editar</button>
+          <button class="btn-sm" style="border-color:var(--blue);color:var(--blue);background:transparent;" onclick="crearClienteDesdeAppt(${a.id})" title="Crear cliente desde esta cita">👥</button>
           <button class="btn-sm btn-red" onclick="deleteAppt(${a.id})">Eliminar</button>
         </div>
       </td>
@@ -1481,8 +1670,272 @@ document.querySelectorAll('.modal-overlay').forEach(mo=>{
 document.addEventListener('keydown',e=>{if(e.key==='Escape') document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'));});
 
 // ═══════════════════════════════════════════════
-// TOAST
+// CLIENTES
 // ═══════════════════════════════════════════════
+function tipoBadge(t) {
+  const map = { 'Nuevo':'badge-teal','Activo':'badge-green','VIP':'badge-gold','Inactivo':'badge-purple' };
+  return `<span class="badge ${map[t]||'badge-teal'}">${t}</span>`;
+}
+
+function renderClientes(search='', filterTipo='') {
+  let data = [...clientes];
+  if (search) data = data.filter(c=>(c.name+c.email+c.empresa+c.servicio).toLowerCase().includes(search.toLowerCase()));
+  if (filterTipo) data = data.filter(c=>c.tipo===filterTipo);
+  data = data.reverse();
+  const tbody = document.getElementById('clientesBody');
+  const empty = document.getElementById('clientesEmpty');
+  if (!tbody) return;
+  if (!data.length) { tbody.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+  tbody.innerHTML = data.map(c=>`
+    <tr>
+      <td>
+        <div style="font-weight:600;">${c.name}</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--muted2);">${c.email}</div>
+      </td>
+      <td>
+        <div style="font-size:.9rem;">${c.empresa||'—'}</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--muted2);">${c.industria||''}</div>
+      </td>
+      <td style="font-family:'Share Tech Mono',monospace;font-size:.78rem;">${c.phone||'—'}</td>
+      <td><span class="badge badge-teal">${c.servicio}</span></td>
+      <td>${tipoBadge(c.tipo)}</td>
+      <td style="font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--muted2);">
+        ${c.citaId ? `<span style="color:var(--teal);">Cita #${String(c.citaId).slice(-4)}</span>` : '—'}
+      </td>
+      <td>
+        <div style="display:flex;gap:.4rem;">
+          <button class="btn-sm btn-teal" onclick="verCliente(${c.id})">Ver</button>
+          <button class="btn-sm btn-gold" onclick="editCliente(${c.id})">Editar</button>
+          <button class="btn-sm btn-red" onclick="deleteCliente(${c.id})">Eliminar</button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+let editClienteId = null;
+
+function populateCitasSelect(selectedId='') {
+  const sel = document.getElementById('cl_citaId');
+  sel.innerHTML = '<option value="">Sin cita asociada</option>' +
+    appts.map(a=>`<option value="${a.id}" ${a.id==selectedId?'selected':''}>${a.name} · ${a.type} · ${a.date}</option>`).join('');
+}
+
+function openClienteModal() {
+  editClienteId = null;
+  document.getElementById('clienteModalTitle').textContent = '👥 NUEVO CLIENTE';
+  ['cl_name','cl_email','cl_phone','cl_empresa','cl_industria','cl_web','cl_direccion','cl_notas'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('cl_tipo').value = 'Nuevo';
+  document.getElementById('cl_servicio').value = 'Business Software';
+  populateCitasSelect();
+  openModal('clienteModal');
+}
+
+function crearClienteDesdeAppt(apptId) {
+  const a = appts.find(x=>x.id===apptId); if(!a) return;
+  editClienteId = null;
+  document.getElementById('clienteModalTitle').textContent = '👥 CLIENTE DESDE CITA';
+  document.getElementById('cl_name').value = a.name;
+  document.getElementById('cl_email').value = a.email;
+  document.getElementById('cl_phone').value = a.phone||'';
+  document.getElementById('cl_empresa').value = a.company||'';
+  document.getElementById('cl_industria').value = '';
+  document.getElementById('cl_web').value = '';
+  document.getElementById('cl_direccion').value = '';
+  document.getElementById('cl_notas').value = a.notes||'';
+  document.getElementById('cl_tipo').value = 'Nuevo';
+  // Match service from appointment type
+  const svcMap = {
+    'Consulta Gratuita':'Consultoría',
+    'Demo de Software':'Business Software',
+    'Soporte IT':'IT Support',
+    'Propuesta de Proyecto':'Business Software'
+  };
+  document.getElementById('cl_servicio').value = svcMap[a.type]||'Business Software';
+  populateCitasSelect(apptId);
+  openModal('clienteModal');
+  showView('clientes', document.querySelector('[onclick*=clientes]'));
+}
+
+function editCliente(id) {
+  const c = clientes.find(x=>x.id===id); if(!c) return;
+  editClienteId = id;
+  document.getElementById('clienteModalTitle').textContent = '✏️ EDITAR CLIENTE';
+  document.getElementById('cl_name').value = c.name;
+  document.getElementById('cl_email').value = c.email;
+  document.getElementById('cl_phone').value = c.phone||'';
+  document.getElementById('cl_empresa').value = c.empresa||'';
+  document.getElementById('cl_industria').value = c.industria||'';
+  document.getElementById('cl_web').value = c.web||'';
+  document.getElementById('cl_direccion').value = c.direccion||'';
+  document.getElementById('cl_notas').value = c.notas||'';
+  document.getElementById('cl_tipo').value = c.tipo||'Nuevo';
+  document.getElementById('cl_servicio').value = c.servicio||'Business Software';
+  populateCitasSelect(c.citaId||'');
+  openModal('clienteModal');
+}
+
+async function saveCliente() {
+  const name = document.getElementById('cl_name').value.trim();
+  const email = document.getElementById('cl_email').value.trim();
+  if(!name||!email){alert('Nombre y email son requeridos.');return;}
+  const obj = {
+    id: editClienteId||Date.now(), name, email,
+    phone:      document.getElementById('cl_phone').value.trim(),
+    empresa:    document.getElementById('cl_empresa').value.trim(),
+    industria:  document.getElementById('cl_industria').value.trim(),
+    web:        document.getElementById('cl_web').value.trim(),
+    direccion:  document.getElementById('cl_direccion').value.trim(),
+    notas:      document.getElementById('cl_notas').value.trim(),
+    tipo:       document.getElementById('cl_tipo').value,
+    servicio:   document.getElementById('cl_servicio').value,
+    citaId:     document.getElementById('cl_citaId').value||'',
+    createdAt:  editClienteId ? (clientes.find(c=>c.id===editClienteId)||{}).createdAt : new Date().toLocaleDateString('es')
+  };
+  if(editClienteId) { clientes=clientes.map(c=>c.id===editClienteId?obj:c); }
+  else { clientes.push(obj); }
+  await storeSet('fv_clientes', clientes);
+  closeModal('clienteModal'); refreshAll(); toast('✓ Cliente guardado');
+}
+
+async function deleteCliente(id) {
+  if(!confirm('¿Eliminar este cliente?')) return;
+  clientes = clientes.filter(c=>c.id!==id);
+  await storeSet('fv_clientes',clientes); refreshAll(); toast('✓ Cliente eliminado');
+}
+
+function verCliente(id) {
+  const c = clientes.find(x=>x.id===id); if(!c) return;
+  const cita = c.citaId ? appts.find(a=>a.id==c.citaId) : null;
+  document.getElementById('detailContent').innerHTML=`
+    <h3>👥 DETALLE DE CLIENTE</h3>
+    <div style="display:flex;gap:.8rem;align-items:center;margin-bottom:1.5rem;">
+      ${tipoBadge(c.tipo)}
+      <span class="badge badge-teal">${c.servicio}</span>
+    </div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--teal);letter-spacing:2px;margin-bottom:.8rem;">DATOS PERSONALES</div>
+    <div class="detail-grid" style="margin-bottom:1rem;">
+      <div class="detail-item"><label>NOMBRE</label><span>${c.name}</span></div>
+      <div class="detail-item"><label>EMAIL</label><span>${c.email}</span></div>
+      <div class="detail-item"><label>TELÉFONO</label><span>${c.phone||'—'}</span></div>
+      <div class="detail-item"><label>REGISTRADO</label><span>${c.createdAt||'—'}</span></div>
+    </div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--gold);letter-spacing:2px;margin-bottom:.8rem;">EMPRESA</div>
+    <div class="detail-grid" style="margin-bottom:1rem;">
+      <div class="detail-item"><label>EMPRESA</label><span>${c.empresa||'—'}</span></div>
+      <div class="detail-item"><label>INDUSTRIA</label><span>${c.industria||'—'}</span></div>
+      <div class="detail-item"><label>SITIO WEB</label><span>${c.web||'—'}</span></div>
+      <div class="detail-item"><label>DIRECCIÓN</label><span>${c.direccion||'—'}</span></div>
+    </div>
+    ${cita?`
+    <div style="font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--teal);letter-spacing:2px;margin-bottom:.8rem;">CITA DE ORIGEN</div>
+    <div class="detail-grid" style="margin-bottom:1rem;">
+      <div class="detail-item"><label>TIPO</label><span>${cita.type}</span></div>
+      <div class="detail-item"><label>FECHA</label><span>${cita.date}</span></div>
+      <div class="detail-item"><label>MODALIDAD</label><span>${cita.mode}</span></div>
+      <div class="detail-item"><label>ESTADO</label><span>${cita.status}</span></div>
+    </div>`:''} 
+    ${c.notas?`<div class="detail-item" style="margin-bottom:1rem;"><label>NOTAS INTERNAS</label><span style="white-space:pre-wrap;">${c.notas}</span></div>`:''}
+    <div style="display:flex;justify-content:flex-end;gap:.8rem;margin-top:1.5rem;">
+      <button class="btn-sm btn-gold" onclick="closeModal('detailModal');editCliente(${c.id})">Editar</button>
+      <button class="btn-sm btn-red" onclick="closeModal('detailModal');deleteCliente(${c.id})">Eliminar</button>
+    </div>`;
+  openModal('detailModal');
+}
+
+// ═══════════════════════════════════════════════
+// CONTACTO
+// ═══════════════════════════════════════════════
+async function loadContacto() {
+  const data = (await storeGet('fv_contacto')) || {};
+  document.getElementById('ct_email').value    = data.email    || '';
+  document.getElementById('ct_phone').value    = data.phone    || '';
+  document.getElementById('ct_web').value      = data.web      || '';
+  document.getElementById('ct_address').value  = data.address  || '';
+  document.getElementById('ct_whatsapp').value = data.whatsapp || '';
+  document.getElementById('ct_linkedin').value = data.linkedin || '';
+  showContactoDisplay(data);
+}
+function showContactoDisplay(data) {
+  const box = document.getElementById('contactoInfo');
+  const disp = document.getElementById('contactoDisplay');
+  const lines = [
+    data.email    ? `✉️ ${data.email}`    : null,
+    data.phone    ? `📞 ${data.phone}`    : null,
+    data.web      ? `🌐 ${data.web}`      : null,
+    data.address  ? `📍 ${data.address}`  : null,
+    data.whatsapp ? `💬 WhatsApp: ${data.whatsapp}` : null,
+    data.linkedin ? `🔗 ${data.linkedin}` : null,
+  ].filter(Boolean);
+  if (lines.length) {
+    disp.innerHTML = lines.map(l=>`<div>${l}</div>`).join('');
+    box.style.display = 'block';
+  }
+}
+async function saveContacto() {
+  const data = {
+    email:    document.getElementById('ct_email').value.trim(),
+    phone:    document.getElementById('ct_phone').value.trim(),
+    web:      document.getElementById('ct_web').value.trim(),
+    address:  document.getElementById('ct_address').value.trim(),
+    whatsapp: document.getElementById('ct_whatsapp').value.trim(),
+    linkedin: document.getElementById('ct_linkedin').value.trim(),
+  };
+  await storeSet('fv_contacto', data);
+  showContactoDisplay(data);
+  toast('✓ Información de contacto guardada');
+}
+
+// ═══════════════════════════════════════════════
+// SEGURIDAD / CAMBIAR CONTRASEÑA
+// ═══════════════════════════════════════════════
+async function changePassword() {
+  const current = document.getElementById('sec_current').value;
+  const newPass  = document.getElementById('sec_new').value;
+  const confirm  = document.getElementById('sec_confirm').value;
+  const errEl    = document.getElementById('sec_error');
+  const savedPass = (await storeGet('fv_adminpass')) || 'fabvisual2025';
+
+  errEl.style.display = 'none';
+  if (current !== savedPass) {
+    errEl.textContent = '⚠ La contraseña actual es incorrecta.';
+    errEl.style.display = 'block'; return;
+  }
+  if (newPass.length < 6) {
+    errEl.textContent = '⚠ La nueva contraseña debe tener al menos 6 caracteres.';
+    errEl.style.display = 'block'; return;
+  }
+  if (newPass !== confirm) {
+    errEl.textContent = '⚠ Las contraseñas no coinciden.';
+    errEl.style.display = 'block'; return;
+  }
+  await storeSet('fv_adminpass', newPass);
+  document.getElementById('sec_current').value = '';
+  document.getElementById('sec_new').value = '';
+  document.getElementById('sec_confirm').value = '';
+  toast('✓ Contraseña actualizada exitosamente');
+}
+
+// Patch doLogin to use stored password
+const _origDoLogin = doLogin;
+async function doLoginDynamic() {
+  const u = document.getElementById('lUser').value.trim();
+  const p = document.getElementById('lPass').value;
+  const savedPass = (await storeGet('fv_adminpass')) || 'fabvisual2025';
+  if (u === 'admin' && p === savedPass) {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('adminShell').style.display = 'flex';
+    initAdmin();
+    loadContacto();
+  } else {
+    const err = document.getElementById('loginErr');
+    err.style.display = 'block';
+    setTimeout(() => err.style.display = 'none', 3000);
+  }
+}
+// Override doLogin
+window.doLogin = doLoginDynamic;
+
 let toastTimer;
 function toast(msg) {
   clearTimeout(toastTimer);
