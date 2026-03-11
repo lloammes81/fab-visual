@@ -791,26 +791,7 @@
       <h2>Resultados <em>reales</em></h2>
     </div>
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;" class="reveal" id="statsRow">
-      <div class="counter-card" style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:2.5rem 1.5rem;text-align:center;position:relative;overflow:hidden;transition:border-color .3s,transform .3s;" onmouseover="this.style.borderColor='rgba(61,214,245,.4)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)'">
-        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:var(--teal);"></div>
-        <div style="font-family:'Orbitron',monospace;font-size:3rem;font-weight:900;color:var(--teal);line-height:1;" class="counter" data-target="50" data-suffix="+">0</div>
-        <div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;color:rgba(232,234,240,.5);letter-spacing:2px;margin-top:.6rem;">PROYECTOS ENTREGADOS</div>
-      </div>
-      <div class="counter-card" style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:2.5rem 1.5rem;text-align:center;position:relative;overflow:hidden;transition:border-color .3s,transform .3s;" onmouseover="this.style.borderColor='rgba(240,180,41,.4)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)'">
-        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:var(--gold);"></div>
-        <div style="font-family:'Orbitron',monospace;font-size:3rem;font-weight:900;color:var(--gold);line-height:1;" class="counter" data-target="30" data-suffix="+">0</div>
-        <div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;color:rgba(232,234,240,.5);letter-spacing:2px;margin-top:.6rem;">CLIENTES SATISFECHOS</div>
-      </div>
-      <div class="counter-card" style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:2.5rem 1.5rem;text-align:center;position:relative;overflow:hidden;transition:border-color .3s,transform .3s;" onmouseover="this.style.borderColor='rgba(61,214,245,.4)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)'">
-        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:var(--teal);"></div>
-        <div style="font-family:'Orbitron',monospace;font-size:3rem;font-weight:900;color:var(--teal);line-height:1;" class="counter" data-target="5" data-suffix=" años">0</div>
-        <div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;color:rgba(232,234,240,.5);letter-spacing:2px;margin-top:.6rem;">DE EXPERIENCIA</div>
-      </div>
-      <div class="counter-card" style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:2.5rem 1.5rem;text-align:center;position:relative;overflow:hidden;transition:border-color .3s,transform .3s;" onmouseover="this.style.borderColor='rgba(240,180,41,.4)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)'">
-        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:var(--gold);"></div>
-        <div style="font-family:'Orbitron',monospace;font-size:3rem;font-weight:900;color:var(--gold);line-height:1;" class="counter" data-target="100" data-suffix="%">0</div>
-        <div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;color:rgba(232,234,240,.5);letter-spacing:2px;margin-top:.6rem;">COMPROMISO TOTAL</div>
-      </div>
+      <!-- Stats rendered dynamically by JS -->
     </div>
   </div>
 </section>
@@ -1078,29 +1059,70 @@
   }, { threshold: 0.1 });
   reveals.forEach(r => observer.observe(r));
 
-  // ─── ANIMATED COUNTERS ───
-  let countersDone = false;
-  const statsObserver = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting && !countersDone) {
-        countersDone = true;
-        document.querySelectorAll('.counter').forEach(el => {
-          const target = +el.dataset.target;
-          const suffix = el.dataset.suffix || '';
-          const duration = 1800;
-          const step = target / (duration / 16);
-          let current = 0;
-          const timer = setInterval(() => {
-            current += step;
-            if (current >= target) { current = target; clearInterval(timer); }
-            el.textContent = Math.floor(current) + suffix;
-          }, 16);
-        });
-      }
-    });
-  }, { threshold: 0.4 });
-  const statsRow = document.getElementById('statsRow');
-  if (statsRow) statsObserver.observe(statsRow);
+  // ─── DYNAMIC STATS FROM ADMIN ───
+  const DEFAULT_STATS = [
+    { target: 50, suffix: '+',     label: 'PROYECTOS ENTREGADOS', color: 'teal' },
+    { target: 30, suffix: '+',     label: 'CLIENTES SATISFECHOS', color: 'gold' },
+    { target: 5,  suffix: ' años', label: 'DE EXPERIENCIA',       color: 'teal' },
+    { target: 100,suffix: '%',     label: 'COMPROMISO TOTAL',     color: 'gold' },
+  ];
+  const COLOR_MAP = {
+    teal: { bar: 'var(--teal)', text: 'var(--teal)', hover: 'rgba(61,214,245,.4)' },
+    gold: { bar: 'var(--gold)', text: 'var(--gold)', hover: 'rgba(240,180,41,.4)' },
+  };
+
+  async function loadStats() {
+    let stats = DEFAULT_STATS;
+    try {
+      const r = await window.storage.get('fv_stats');
+      if (r && r.value) stats = JSON.parse(r.value);
+    } catch(e) {}
+    renderStats(stats);
+  }
+
+  function renderStats(stats) {
+    const row = document.getElementById('statsRow');
+    if (!row) return;
+    row.innerHTML = stats.map(s => {
+      const c = COLOR_MAP[s.color] || COLOR_MAP.teal;
+      return `
+        <div class="counter-card" style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:2.5rem 1.5rem;text-align:center;position:relative;overflow:hidden;transition:border-color .3s,transform .3s;"
+          onmouseover="this.style.borderColor='${c.hover}';this.style.transform='translateY(-4px)'"
+          onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)'">
+          <div style="position:absolute;top:0;left:0;right:0;height:2px;background:${c.bar};"></div>
+          <div style="font-family:'Orbitron',monospace;font-size:3rem;font-weight:900;color:${c.text};line-height:1;" class="counter" data-target="${s.target}" data-suffix="${s.suffix}">0</div>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;color:rgba(232,234,240,.5);letter-spacing:2px;margin-top:.6rem;">${s.label}</div>
+        </div>`;
+    }).join('');
+    startCounters();
+  }
+
+  function startCounters() {
+    let countersDone = false;
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting && !countersDone) {
+          countersDone = true;
+          document.querySelectorAll('.counter').forEach(el => {
+            const target = +el.dataset.target;
+            const suffix = el.dataset.suffix || '';
+            const duration = 1800;
+            const step = target / (duration / 16);
+            let current = 0;
+            const timer = setInterval(() => {
+              current += step;
+              if (current >= target) { current = target; clearInterval(timer); }
+              el.textContent = Math.floor(current) + suffix;
+            }, 16);
+          });
+        }
+      });
+    }, { threshold: 0.4 });
+    const statsRow = document.getElementById('statsRow');
+    if (statsRow) statsObserver.observe(statsRow);
+  }
+
+  loadStats();
 
   // Staggered hero reveals on load
   document.querySelectorAll('.hero .reveal').forEach((el, i) => {
